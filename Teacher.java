@@ -8,13 +8,17 @@
 *	TODO: create quiz?
 */
 
+import java.util.*;
 
 public class Teacher extends User
 {
 
+	public static Vector<Class> classList;
+
 	public Teacher(int _id, String _name, String _pass)
 	{
 		super(_id, _name, _pass, 't');
+		classList = new Vector<Class>();
 	}
 
 	public void createQuiz()
@@ -30,6 +34,11 @@ public class Teacher extends User
 
 	public String toString()
 	{
-		return "\n\nTeacher: " + super.toString(); 
+		return "\n\nTeacher: " + super.toString();
+	}
+
+	public void addClass()
+	{
+		//ADD
 	}
 }

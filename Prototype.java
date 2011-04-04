@@ -39,8 +39,8 @@ public class Prototype
 		Vector<Question> question = new Vector<Question>();
 		Question q = new Question("What year is it?", answers);
 		question.add(q);
-		Quiz quiz1 = new Quiz("Quiz 1", question);	
-		nClass.addQuiz(quiz1);		
+		Quiz quiz1 = new Quiz("Quiz 1", question);
+		nClass.addQuiz(quiz1);
 
 		currA = null;
 		currS = null;
@@ -89,7 +89,7 @@ public class Prototype
 						if ((tempT.getId() == id) && (pass.compareTo(tempT.getPass()) == 0))
 							currT = tempT;
 					}
-			
+
 				if (s != null)
 					for (int i = 0; i < s.size(); i++)
 					{
@@ -111,13 +111,13 @@ public class Prototype
 
 	public static void mainMenu()
 	{
-		int option = 0; 
+		int option = 0;
 		boolean isAdmin = false;
 		int high = 5;
 		String s = "\n\tMain Menu\n\n";
-		
+
 		s += "Hello, ";
-		
+
 		if (currA != null)
 			s += currA.getName();
 		else if (currT != null)
@@ -126,7 +126,7 @@ public class Prototype
 			s += currS.getName();
 
 
-		s += "\n\nEnter the following to view:\n" + "\t(1) Logout\n" + 
+		s += "\n\nEnter the following to view:\n" + "\t(1) Logout\n" +
 			"\t(2) Class\n" + "\t(3) Account Management\n";
 
 		if (currA != null)
@@ -142,9 +142,9 @@ public class Prototype
 
 		do
 		{
-	
+
 			System.out.print(s);
-			option = keyboard.nextInt();	
+			option = keyboard.nextInt();
 
 			if (isAdmin)
 				switch(option)
@@ -162,7 +162,8 @@ public class Prototype
 						create('t');
 						break;
 					case 6:
-						System.out.println("\nCreate Class\n");
+						//System.out.println("\nCreate Class\n");
+						classCreator();
 						break;
 					default:
 						System.out.println("\nEnter a correct option\n");
@@ -181,7 +182,7 @@ public class Prototype
 						System.out.println("\nEnter a correct option\n");
 						break;
 				}
-					
+
 		} while (option != 1);
 
 		currA = null;
@@ -192,7 +193,7 @@ public class Prototype
 	public static void create(char userType)
 	{
 		if (userType == 'a')
-			System.out.println("\nCreate Admin\n");	
+			System.out.println("\nCreate Admin\n");
 
 		if (userType == 't')
 			System.out.println("\nCreate Teacher\n");
@@ -200,12 +201,12 @@ public class Prototype
 		if (userType == 's')
 			System.out.println("\nCreate Student\n");
 
-		
+
 		System.out.print("\tName: ");
 		String name = keyboard.next();
 		System.out.print("\tID: ");
 		int id = keyboard.nextInt();
-		
+
 		if (userType == 'a')
 		{
 			System.out.print("\tPassword: ");
@@ -246,7 +247,7 @@ public class Prototype
 		{
 			if (currA.getClasses() != null)
 				c = currA.getClasses();
-				
+
 		}
 		else if (currT != null)
 		{
@@ -260,29 +261,29 @@ public class Prototype
 		}
 
 		if (c != null)
-		{		
+		{
 			for (i = 0; i < c.size(); i++)
 			{
-				s += "\t(" + (i+1) + ") " + c.get(i) + "\n"; 
+				s += "\t(" + (i+1) + ") " + c.get(i) + "\n";
 			}
-				
+
 			s += "\t(" + ++i + ") " + "Back\n" + "\nEnter Option: ";
-				
+
 			do
 			{
 				System.out.print(s);
 				option = keyboard.nextInt();
-					
+
 				if ((option > 0) && (option < i))
 					visitClass(c.get(--option));
-			
+
 			} while (option != i);
-		
+
 		}
 		else
 			System.out.println(s + "No classes to display\n");
 
-		
+
 	}
 
 	public static void visitClass(Class currClass)
@@ -298,7 +299,7 @@ public class Prototype
 				"\t(" + i++ + ") " + "Change Teacher\n";
 
 
-			
+
 		}
 		else if (currT != null)
 		{
@@ -328,14 +329,14 @@ public class Prototype
 					else
 						option = 5;
 					break;
-				case 4: 
+				case 4:
 					if (currA != null)
 						System.out.println("Change Teacher");
 					else if (currT != null)
 						option = 5;
 					else if (currS != null)
 						System.out.println("\nEnter a correct option\n");
-						
+
 					break;
 				case 5:
 					if ((currT != null) || (currS != null))
@@ -343,24 +344,24 @@ public class Prototype
 					break;
 				default:
 					System.out.println("\nEnter a correct option\n");
-			} 
-			
+			}
+
 		} while (option != i);
-			
-	}	
+
+	}
 
 	public static void listQuizzes(Vector<Quiz> quizzes)
 	{
 		String s = "\n\tQuiz List\n\n";
 		int i, option = 0;
-		
+
 		if (quizzes != null)
 		{
 			for (i = 0; i < quizzes.size(); i++)
 			{
-				s += "\t(" + (i+1) + ") " + quizzes.get(i) + "\n"; 
+				s += "\t(" + (i+1) + ") " + quizzes.get(i) + "\n";
 			}
-			
+
 			s += "\t(" + ++i + ") Back\n" + "\nEnter a Quiz number to view or go Back: ";
 		}
 		else
@@ -371,8 +372,8 @@ public class Prototype
 		}
 
 
-		
-		
+
+
 		do
 		{
 			System.out.print(s);
@@ -383,7 +384,7 @@ public class Prototype
 					viewQuiz(quizzes.get(--option));
 			else if (option != i)
 				System.out.println("\nEnter a correct option\n");
-		} while (option != i); 
+		} while (option != i);
 	}
 
 	public static void viewQuiz(Quiz quiz)
@@ -398,7 +399,7 @@ public class Prototype
 
 		s += "\t(2) Back\n" + "\nEnter an option: ";
 
-		do 
+		do
 		{
 			System.out.print(s);
 			option = keyboard.nextInt();
@@ -408,10 +409,10 @@ public class Prototype
 					takeQuiz(quiz);
 				else
 					System.out.println("\nModify Quiz!\n"); //modifyQuiz(quiz);
-				
+
 			}
 			else if (option != 2)
-				System.out.println("\nEnter a correct option\n");	
+				System.out.println("\nEnter a correct option\n");
 
 		} while (option != 2);
 	}
@@ -430,7 +431,7 @@ public class Prototype
 
 			for (int j = 0; j < answers.size(); j++)
 			{
-				s += "\t(" + (j+1) + ") " + answers.get(j) + "\n"; 
+				s += "\t(" + (j+1) + ") " + answers.get(j) + "\n";
 			}
 			s += "\nEnter your answer: ";
 			System.out.print(s);
@@ -447,16 +448,16 @@ public class Prototype
 	{
 		int option = 0;
 		boolean flag;
-		
+
 		do
 		{
 			System.out.println("Account Management\n");
-			System.out.print("\t(1) Change Password\n" + 
-				"\t(2) Back\n" + "\nEnter: ");	
+			System.out.print("\t(1) Change Password\n" +
+				"\t(2) Back\n" + "\nEnter: ");
 			option = keyboard.nextInt();
 
 			if (option == 1)
-			{	
+			{
 				System.out.print("\nEnter Current Password: ");
 				String oldPass = keyboard.next();
 				System.out.print("Enter New Password: ");
@@ -472,11 +473,33 @@ public class Prototype
 				if (flag)
 					System.out.println("\nPassword Change was successful");
 				else
-					System.out.println("\nCurrent Password is incorrect");			
+					System.out.println("\nCurrent Password is incorrect");
 			}
 			else if (option != 2)
 				System.out.println("\nEnter a correct option.");
 		}
 		while (option != 2);
+	}
+
+
+	public static void classCreator()
+		{
+			int _courseId;
+			String _courseDesc;
+			String _courseTitle;
+
+			System.out.println("\nCreate Class\n");
+
+			System.out.print("Enter the courseID: ");
+			_courseId = keyboard.nextInt();
+			System.out.print("Enter the Course Title: ");
+			_courseTitle = keyboard.next();
+			System.out.print("Enter a breif Course Description: ");
+			_courseDesc = keyboard.next();
+			System.out.print("Enter the Teacher: NOTWORKING");
+
+			Class newClass = new Class(_courseId, _courseTitle, _courseDesc, t.get(0));
+
+			//teacher.addclass(this)
 	}
 }
