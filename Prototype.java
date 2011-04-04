@@ -14,7 +14,6 @@ public class Prototype
 
 	public static void main (String [] args)
 	{
-		int option;
 		keyboard = new Scanner(System.in);
 		a = new Vector<Admin>();
 		t = new Vector<Teacher>();
@@ -53,6 +52,7 @@ public class Prototype
 	{
 		int id = 0, option = 0;
 		String pass = "";
+		String error;
 
 		System.out.println("\tLog Screen\n");
 
@@ -67,17 +67,37 @@ public class Prototype
 				//Log In
 				System.out.print("\tID: ");
 				id = keyboard.nextInt();
-				System.out.print("\tPassword: ");
-				pass = keyboard.next();
+
 
 				/* this would do processing reading name of Text files. N or O(1) find for file
 				* Such as naming all of the text files based id and see if the text files have
 				* said id
-				*/
+
+				char test = (Integer.toString(id)).charAt(0);
+				if (test == '1')
+				{
+					// tempA = openAdmin
+					if (pass.compareTo(tempA.getPass()) == 0)
+						currA = tempA;
+					else
+						s = "\nError: Enter correct id or password\n";
+				}
+				else if (test == '2')
+					// currT = open teacher
+				else if (test == '3')
+					// currS = open student
+				
+				if ((currA != null) || (currT != null) || (currS != null))
+					s = "\nError: Wrong Id entered.\n";*/
+
+				System.out.print("\tPassword: ");
+				pass = keyboard.next();
+
 				if (a != null)
 					for (int i = 0; i < a.size(); i++)
 					{
 						Admin tempA = a.get(i);
+						
 						if ((tempA.getId() == id) && (pass.compareTo(tempA.getPass()) == 0))
 							currA = tempA;
 					}
@@ -112,8 +132,6 @@ public class Prototype
 	public static void mainMenu()
 	{
 		int option = 0;
-		boolean isAdmin = false;
-		int high = 5;
 		String s = "\n\tMain Menu\n\n";
 
 		s += "Hello, ";
@@ -131,8 +149,6 @@ public class Prototype
 
 		if (currA != null)
 		{
-			high = 6;
-			isAdmin = true;
 			s += "\t(4) Create Admin\n" +
 				"\t(5) Create Teacher\n" +
 				"\t(6) Create Class\n";
@@ -146,7 +162,7 @@ public class Prototype
 			System.out.print(s);
 			option = keyboard.nextInt();
 
-			if (isAdmin)
+			if (currA != null)
 				switch(option)
 				{
 					case 2:
@@ -162,7 +178,6 @@ public class Prototype
 						create('t');
 						break;
 					case 6:
-						//System.out.println("\nCreate Class\n");
 						classCreator();
 						break;
 					default:
@@ -484,22 +499,55 @@ public class Prototype
 
 	public static void classCreator()
 		{
-			int _courseId;
-			String _courseDesc;
-			String _courseTitle;
+			int id;
+			String desc;
+			String title;
+			Teacher nTeacher = null;
+			String s = "";
 
 			System.out.println("\nCreate Class\n");
 
 			System.out.print("Enter the courseID: ");
-			_courseId = keyboard.nextInt();
+			id = keyboard.nextInt();
 			System.out.print("Enter the Course Title: ");
-			_courseTitle = keyboard.next();
-			System.out.print("Enter a breif Course Description: ");
-			_courseDesc = keyboard.next();
-			System.out.print("Enter the Teacher: NOTWORKING");
+			title = keyboard.next();
+			System.out.print("Enter a Breif Course Description: ");
+			desc = keyboard.next();
 
-			Class newClass = new Class(_courseId, _courseTitle, _courseDesc, t.get(0));
+			if (t != null)
+			{	
+				do
+				{
+					System.out.println("\nPick a teacher\n");
+		
+					for (int j = 0; j < t.size(); j++)
+					{
+						nTeacher = t.get(j);
+						s += "\t(" + (j+1) + ") " + nTeacher + "\n";
+					}
+		
+					System.out.print(s + "\nEnter the Teacher ID: ");
+					int tId = keyboard.nextInt();
 
-			//teacher.addclass(this)
+					for (int j = 0; j < t.size(); j++)
+					{
+						if (tId == (t.get(j)).getId())
+							nTeacher = t.get(j);
+					}
+				}
+				while (nTeacher == null); 
+			}
+			else
+				System.out.print("\nNo teachers found\n");
+			
+			if (nTeacher != null)
+			{
+				Class newClass = new Class(id, title, desc, nTeacher);
+				currA.addClass(newClass);
+				nTeacher.addClass(newClass);
+				System.out.println("\nClass Created\n");
+			}
+			else
+				System.out.println("\nClass not created\n");
 	}
 }
