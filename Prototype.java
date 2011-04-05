@@ -1,3 +1,31 @@
+/* Team Name: Jakl
+*  Prototype main class
+*  Last Modified By: Jeremy Parmenter
+*  Last Modified On: 4//11
+*/
+
+/*
+*	TODO: 
+*		Creating Quiz
+*		IO Handling 	
+*			-login() - load users/classes.
+*				When a user loads all of the classes files 
+*				(and the quizzes) need to be initialized as well
+*			-create(char userType) - save users
+*			-takeQuiz - saves user cause of changed grade
+*			-createQuiz - savesClass
+*			-createClass - saves class
+*			-viewClass - saves class
+*			-Modify Roster - saves class
+*			-Modify Teacher - saves class
+*		Exception handling
+*		Modify Roster
+*		Modify Teacher	
+*		View Grades - for a student or list all grades for students
+*		**ADDITION FUNCTIONALITY FOR OBJECTS:
+*		Quiz Check CreateQuiz info
+*		User to hanle grading
+*/
 import java.util.*;
 
 public class Prototype
@@ -78,20 +106,43 @@ public class Prototype
 				if (test == '1')
 				{
 					// tempA = openAdmin
-					if (pass.compareTo(tempA.getPass()) == 0)
-						currA = tempA;
+					if (tempA != null)
+					{
+						if (pass.compareTo(tempA.getPass()) == 0)
+							currA = tempA;
+						else
+							System.out.println("\nError: Incorrect Password\n");
+					}
 					else
-						s = "\nError: Enter correct id or password\n";
+						System.out.println("\nError: Incorrect Id\n");
 				}
 				else if (test == '2')
-					// currT = open teacher
+				{
+					// tempT = openTeacher
+					if (tempT != null)
+					{
+						if (pass.compareTo(tempT.getPass()) == 0)
+							currT = tempT;
+						else
+							System.out.println("\nError: Incorrect Password\n");
+					}
+					else
+						System.out.println("\nError: Incorrect Id\n");
+				}
 				else if (test == '3')
-					// currS = open student
+				{
+					// tempS = openStudent
+					if (tempS != null)
+					{
+						if (pass.compareTo(tempS.getPass()) == 0)
+							currS = tempS;
+						else
+							System.out.println("\nError: Incorrect Password\n");
+					}
+					else
+						System.out.println("\nError: Incorrect Id\n");
+				}*/
 				
-				if ((currA != null) || (currT != null) || (currS != null))
-					s = "\nError: Wrong Id entered.\n";*/
-
-
 
 				if (a != null)
 					for (int i = 0; i < a.size(); i++)
@@ -227,7 +278,7 @@ public class Prototype
 			System.out.print("\tPassword: ");
 			String pass = keyboard.next();
 			Admin admin = new Admin(id, name, pass);
-			a.add(admin);
+			a.add(admin);//Save Admin
 			System.out.println("\nAdmin Added\n");
 		}
 		else
@@ -237,14 +288,14 @@ public class Prototype
 			{
 				Teacher teacher = new Teacher(id, name, pass);
 				System.out.print(teacher);
-				t.add(teacher);
+				t.add(teacher); //Save Teacher
 				System.out.println("\nTeacher Added Pass: " + (teacher.getPass()) + "\n");
 			}
 
 			if (userType == 's')
 			{
 				User student = new User(id, name, pass);
-				s.add(student);
+				s.add(student); //Save Student
 				System.out.println("\nStudent Added Pass: " + (student.getPass()) + "\n");
 			}
 		}
@@ -313,8 +364,6 @@ public class Prototype
 			s += "\t(" + i++ + ") " + "Modify Roster\n" +
 				"\t(" + i++ + ") " + "Change Teacher\n";
 
-
-
 		}
 		else if (currT != null)
 		{
@@ -336,17 +385,17 @@ public class Prototype
 					listQuizzes(currClass);
 					break;
 				case 2:
-					System.out.println("View Grades");
+					System.out.println("\nView Grades\n");
 					break;
 				case 3:
 					if ((currA != null) || (currT != null))
-						System.out.println("Modify Roster");
+						System.out.println("\nModify Roster\n");
 					else
 						option = 5;
 					break;
 				case 4:
 					if (currA != null)
-						System.out.println("Change Teacher");
+						System.out.println("\nChange Teacher\n");
 					else if (currT != null)
 						option = 5;
 					else if (currS != null)
@@ -393,7 +442,7 @@ public class Prototype
 			System.out.print(s);
 			option = keyboard.nextInt();
 
-			if ((option > 0) && (option < i))
+			if ((option > 0) && (option < i-1))
 				if (quizzes != null)
 					viewQuiz(quizzes.get(--option), c);
 			else if (option == (i-1))
@@ -405,6 +454,19 @@ public class Prototype
 
 	public static Class createQuiz(Class c)
 	{
+		/*
+			This function will create a quiz by
+			asking for a title, how many questions
+			running through a loop to get the amount of
+			questions. 
+			-Each question will ask for the 
+			initial question and then how many answers.
+			-The Answers will ask for the statement and 
+			it its true or false. 
+			-This function also needs to SAVE class AND
+			update c.
+		*/
+		System.out.println("\nCreate Quiz\n");
 		return c;
 	} 
 
@@ -428,14 +490,25 @@ public class Prototype
 			{
 				if (currS != null)
 					takeQuiz(quiz);
-				else
-					System.out.println("\nModify Quiz!\n"); //modifyQuiz(quiz);
+				else 
+					modifyQuiz(quiz, c);
 
 			}
 			else if (option != 2)
 				System.out.println("\nEnter a correct option\n");
 
 		} while (option != 2);
+	}
+
+	public static void modifyQuiz(Quiz quiz, Class c)
+	{
+		/*This class will allow the teacher or admin
+			-delete a quiz 
+			-modify title 
+			-answers
+			**ADDITIONAL QUIZ FUNCTIONALITY NEEDED
+		*/
+		System.out.println("\nModify Quiz!\n");
 	}
 
 	public static void takeQuiz(Quiz quiz)
@@ -460,9 +533,9 @@ public class Prototype
 			sAnswers.add((answers.get(--choice)).getStmt());
 		}
 
-		int grade = quiz.grade(sAnswers);
+		int grade = quiz.grade(sAnswers); 
 		System.out.println("\n" + grade + "\n");
-		currS.modifyGrade(1, grade);
+		currS.modifyGrade(1, grade); //Needs to save student info after
 	}
 
 	public static void accountManagement()
@@ -484,6 +557,7 @@ public class Prototype
 				System.out.print("Enter New Password: ");
 				String newPass = keyboard.next();
 
+				// Needs to save user after change
 				if (currA != null)
 					flag = currA.changePass(oldPass, newPass);
 				else if (currT != null)
@@ -500,6 +574,10 @@ public class Prototype
 				System.out.println("\nEnter a correct option.");
 		}
 		while (option != 2);
+	}
+
+	public static void modifyClass(Class c)
+	{
 	}
 
 
@@ -549,8 +627,8 @@ public class Prototype
 			if (nTeacher != null)
 			{
 				Class newClass = new Class(id, title, desc, nTeacher);
-				currA.addClass(newClass);
-				nTeacher.addClass(newClass);
+				currA.addClass(newClass); //Save class, admin, and teacher
+				nTeacher.addClass(newClass); 
 				System.out.println("\nClass Created\n");
 			}
 			else
