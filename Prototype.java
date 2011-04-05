@@ -67,7 +67,8 @@ public class Prototype
 				//Log In
 				System.out.print("\tID: ");
 				id = keyboard.nextInt();
-
+				System.out.print("\tPassword: ");
+				pass = keyboard.next();
 
 				/* this would do processing reading name of Text files. N or O(1) find for file
 				* Such as naming all of the text files based id and see if the text files have
@@ -90,8 +91,7 @@ public class Prototype
 				if ((currA != null) || (currT != null) || (currS != null))
 					s = "\nError: Wrong Id entered.\n";*/
 
-				System.out.print("\tPassword: ");
-				pass = keyboard.next();
+
 
 				if (a != null)
 					for (int i = 0; i < a.size(); i++)
@@ -333,7 +333,7 @@ public class Prototype
 			switch(option)
 			{
 				case 1:
-					listQuizzes(currClass.getQuiz());
+					listQuizzes(currClass);
 					break;
 				case 2:
 					System.out.println("View Grades");
@@ -365,8 +365,9 @@ public class Prototype
 
 	}
 
-	public static void listQuizzes(Vector<Quiz> quizzes)
+	public static void listQuizzes(Class c)
 	{
+		Vector<Quiz>  quizzes = c.getQuiz();
 		String s = "\n\tQuiz List\n\n";
 		int i, option = 0;
 
@@ -377,7 +378,8 @@ public class Prototype
 				s += "\t(" + (i+1) + ") " + quizzes.get(i) + "\n";
 			}
 
-			s += "\t(" + ++i + ") Back\n" + "\nEnter a Quiz number to view or go Back: ";
+			s += "\t(" + ++i + ") Create a Quiz\n" + "\t(" + ++i +
+				 ") Back\n" + "\nEnter a Quiz number to view or go Back: ";
 		}
 		else
 		{
@@ -386,9 +388,6 @@ public class Prototype
 				"Enter 1 to go back to Class Menu: ";
 		}
 
-
-
-
 		do
 		{
 			System.out.print(s);
@@ -396,13 +395,20 @@ public class Prototype
 
 			if ((option > 0) && (option < i))
 				if (quizzes != null)
-					viewQuiz(quizzes.get(--option));
-			else if (option != i)
+					viewQuiz(quizzes.get(--option), c);
+			else if (option == (i-1))
+				c = createQuiz(c);
+			else if ((option != i || (option != (i-1))))
 				System.out.println("\nEnter a correct option\n");
 		} while (option != i);
 	}
 
-	public static void viewQuiz(Quiz quiz)
+	public static Class createQuiz(Class c)
+	{
+		return c;
+	} 
+
+	public static void viewQuiz(Quiz quiz, Class c)
 	{
 		System.out.println("\n" + quiz + "\n");
 		String s;
@@ -511,7 +517,7 @@ public class Prototype
 			id = keyboard.nextInt();
 			System.out.print("Enter the Course Title: ");
 			title = keyboard.next();
-			System.out.print("Enter a Breif Course Description: ");
+			System.out.print("Enter a Brief Course Description: ");
 			desc = keyboard.next();
 
 			if (t != null)
