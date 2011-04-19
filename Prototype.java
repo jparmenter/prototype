@@ -1,31 +1,3 @@
-/* Team Name: Jakl
-*  Prototype main class
-*  Last Modified By: Jeremy Parmenter
-*  Last Modified On: 4//11
-*/
-
-/*
-*	TODO: 
-*		Creating Quiz
-*		IO Handling 	
-*			-login() - load users/classes.
-*				When a user loads all of the classes files 
-*				(and the quizzes) need to be initialized as well
-*			-create(char userType) - save users
-*			-takeQuiz - saves user cause of changed grade
-*			-createQuiz - savesClass
-*			-createClass - saves class
-*			-viewClass - saves class
-*			-Modify Roster - saves class
-*			-Modify Teacher - saves class
-*		Exception handling
-*		Modify Roster
-*		Modify Teacher	
-*		View Grades - for a student or list all grades for students
-*		**ADDITION FUNCTIONALITY FOR OBJECTS:
-*		Quiz Check CreateQuiz info
-*		User to hanle grading
-*/
 import java.util.*;
 
 public class Prototype
@@ -39,6 +11,7 @@ public class Prototype
 	public static Admin currA;
 	public static User currS;
 	public static Teacher currT;
+	public static jaklUtilities utility;
 
 	public static void main (String [] args)
 	{
@@ -46,16 +19,16 @@ public class Prototype
 		a = new Vector<Admin>();
 		t = new Vector<Teacher>();
 		s = new Vector<User>();
-		Admin admin = new Admin(1234, "Jeremy", "password");
-		Teacher teacher = new Teacher(1111, "Bob", "software");
-		User student = new User(2222, "James", "progit");
-		Class nClass = new Class(272111, "CSE 110 Intro to Java", "This class teaches you java", teacher);
-		admin.addClass(nClass);
-		student.addClass(nClass);
-		teacher.addClass(nClass);
-		a.add(admin);
-		s.add(student);
-		t.add(teacher);
+		//Admin admin = new Admin(1234, "Jeremy", "password");
+		//Teacher teacher = new Teacher(1111, "Bob", "software");
+		//User student = new User(2222, "James", "progit");
+		//Class nClass = new Class(272111, "CSE 110 Intro to Java", "This class teaches you java", teacher);
+		//admin.addClass(nClass);
+		//student.addClass(nClass);
+		//teacher.addClass(nClass);
+		//a.add(admin);
+		//s.add(student);
+		//t.add(teacher);
 		Vector<Answer> answers = new Vector<Answer>();
 		Answer ans = new Answer("2009", false);
 		answers.add(ans);
@@ -67,7 +40,9 @@ public class Prototype
 		Question q = new Question("What year is it?", answers);
 		question.add(q);
 		Quiz quiz1 = new Quiz("Quiz 1", question);
-		nClass.addQuiz(quiz1);
+		//nClass.addQuiz(quiz1);
+		utility = new jaklUtilities();
+		char adminChar = 'a';
 
 		currA = null;
 		currS = null;
@@ -78,6 +53,7 @@ public class Prototype
 
 	public static void login()
 	{
+		String str = null;
 		int id = 0, option = 0;
 		String pass = "";
 		String error;
@@ -98,57 +74,44 @@ public class Prototype
 				System.out.print("\tPassword: ");
 				pass = keyboard.next();
 
+
 				/* this would do processing reading name of Text files. N or O(1) find for file
 				* Such as naming all of the text files based id and see if the text files have
-				* said id
+				* said id */
 
 				char test = (Integer.toString(id)).charAt(0);
 				if (test == '1')
 				{
-					// tempA = openAdmin
-					if (tempA != null)
+					Admin tempA = utility.openAdmin(id);
+
+					if ((tempA != null) && (pass.compareTo(tempA.getPass()) == 0))
 					{
-						if (pass.compareTo(tempA.getPass()) == 0)
-							currA = tempA;
-						else
-							System.out.println("\nError: Incorrect Password\n");
+						currA = tempA;
 					}
 					else
-						System.out.println("\nError: Incorrect Id\n");
+						System.out.println("\nError: Enter correct id or password\n");
 				}
 				else if (test == '2')
 				{
-					// tempT = openTeacher
-					if (tempT != null)
-					{
-						if (pass.compareTo(tempT.getPass()) == 0)
-							currT = tempT;
-						else
-							System.out.println("\nError: Incorrect Password\n");
-					}
-					else
-						System.out.println("\nError: Incorrect Id\n");
-				}
-				else if (test == '3')
-				{
-					// tempS = openStudent
-					if (tempS != null)
-					{
-						if (pass.compareTo(tempS.getPass()) == 0)
-							currS = tempS;
-						else
-							System.out.println("\nError: Incorrect Password\n");
-					}
-					else
-						System.out.println("\nError: Incorrect Id\n");
-				}*/
-				
+					Teacher tempT = utility.openTeacher(id);
 
+					if ((tempT != null) && (pass.compareTo(tempT.getPass()) == 0))
+					{
+						currT = tempT;
+					}
+					else
+						System.out.println("\nError: Enter correct id or password\n");
+				}
+				/*else if (test == '3')
+					// currS = open student
+
+				if ((currA != null) || (currT != null) || (currS != null))
+					s = "\nError: Wrong Id entered.\n";*/
 				if (a != null)
 					for (int i = 0; i < a.size(); i++)
 					{
 						Admin tempA = a.get(i);
-						
+
 						if ((tempA.getId() == id) && (pass.compareTo(tempA.getPass()) == 0))
 							currA = tempA;
 					}
@@ -278,7 +241,7 @@ public class Prototype
 			System.out.print("\tPassword: ");
 			String pass = keyboard.next();
 			Admin admin = new Admin(id, name, pass);
-			a.add(admin);//Save Admin
+			utility.writeAdmin(id, name, pass, 'a');
 			System.out.println("\nAdmin Added\n");
 		}
 		else
@@ -287,15 +250,15 @@ public class Prototype
 			if (userType == 't')
 			{
 				Teacher teacher = new Teacher(id, name, pass);
-				System.out.print(teacher);
-				t.add(teacher); //Save Teacher
+				//System.out.print(teacher);
+				utility.writeTeacher(id, name, pass, 't');
 				System.out.println("\nTeacher Added Pass: " + (teacher.getPass()) + "\n");
 			}
 
 			if (userType == 's')
 			{
 				User student = new User(id, name, pass);
-				s.add(student); //Save Student
+				s.add(student);
 				System.out.println("\nStudent Added Pass: " + (student.getPass()) + "\n");
 			}
 		}
@@ -364,6 +327,8 @@ public class Prototype
 			s += "\t(" + i++ + ") " + "Modify Roster\n" +
 				"\t(" + i++ + ") " + "Change Teacher\n";
 
+
+
 		}
 		else if (currT != null)
 		{
@@ -382,20 +347,20 @@ public class Prototype
 			switch(option)
 			{
 				case 1:
-					listQuizzes(currClass);
+					listQuizzes(currClass.getQuiz());
 					break;
 				case 2:
-					System.out.println("\nView Grades\n");
+					System.out.println("View Grades");
 					break;
 				case 3:
 					if ((currA != null) || (currT != null))
-						System.out.println("\nModify Roster\n");
+						System.out.println("Modify Roster");
 					else
 						option = 5;
 					break;
 				case 4:
 					if (currA != null)
-						System.out.println("\nChange Teacher\n");
+						System.out.println("Change Teacher");
 					else if (currT != null)
 						option = 5;
 					else if (currS != null)
@@ -414,9 +379,8 @@ public class Prototype
 
 	}
 
-	public static void listQuizzes(Class c)
+	public static void listQuizzes(Vector<Quiz> quizzes)
 	{
-		Vector<Quiz>  quizzes = c.getQuiz();
 		String s = "\n\tQuiz List\n\n";
 		int i, option = 0;
 
@@ -427,8 +391,7 @@ public class Prototype
 				s += "\t(" + (i+1) + ") " + quizzes.get(i) + "\n";
 			}
 
-			s += "\t(" + ++i + ") Create a Quiz\n" + "\t(" + ++i +
-				 ") Back\n" + "\nEnter a Quiz number to view or go Back: ";
+			s += "\t(" + ++i + ") Back\n" + "\nEnter a Quiz number to view or go Back: ";
 		}
 		else
 		{
@@ -437,40 +400,23 @@ public class Prototype
 				"Enter 1 to go back to Class Menu: ";
 		}
 
+
+
+
 		do
 		{
 			System.out.print(s);
 			option = keyboard.nextInt();
 
-			if ((option > 0) && (option < i-1))
+			if ((option > 0) && (option < i))
 				if (quizzes != null)
-					viewQuiz(quizzes.get(--option), c);
-			else if (option == (i-1))
-				c = createQuiz(c);
-			else if ((option != i || (option != (i-1))))
+					viewQuiz(quizzes.get(--option));
+			else if (option != i)
 				System.out.println("\nEnter a correct option\n");
 		} while (option != i);
 	}
 
-	public static Class createQuiz(Class c)
-	{
-		/*
-			This function will create a quiz by
-			asking for a title, how many questions
-			running through a loop to get the amount of
-			questions. 
-			-Each question will ask for the 
-			initial question and then how many answers.
-			-The Answers will ask for the statement and 
-			it its true or false. 
-			-This function also needs to SAVE class AND
-			update c.
-		*/
-		System.out.println("\nCreate Quiz\n");
-		return c;
-	} 
-
-	public static void viewQuiz(Quiz quiz, Class c)
+	public static void viewQuiz(Quiz quiz)
 	{
 		System.out.println("\n" + quiz + "\n");
 		String s;
@@ -490,25 +436,14 @@ public class Prototype
 			{
 				if (currS != null)
 					takeQuiz(quiz);
-				else 
-					modifyQuiz(quiz, c);
+				else
+					System.out.println("\nModify Quiz!\n"); //modifyQuiz(quiz);
 
 			}
 			else if (option != 2)
 				System.out.println("\nEnter a correct option\n");
 
 		} while (option != 2);
-	}
-
-	public static void modifyQuiz(Quiz quiz, Class c)
-	{
-		/*This class will allow the teacher or admin
-			-delete a quiz 
-			-modify title 
-			-answers
-			**ADDITIONAL QUIZ FUNCTIONALITY NEEDED
-		*/
-		System.out.println("\nModify Quiz!\n");
 	}
 
 	public static void takeQuiz(Quiz quiz)
@@ -533,9 +468,9 @@ public class Prototype
 			sAnswers.add((answers.get(--choice)).getStmt());
 		}
 
-		int grade = quiz.grade(sAnswers); 
+		int grade = quiz.grade(sAnswers);
 		System.out.println("\n" + grade + "\n");
-		currS.modifyGrade(1, grade); //Needs to save student info after
+		currS.modifyGrade(1, grade);
 	}
 
 	public static void accountManagement()
@@ -557,7 +492,6 @@ public class Prototype
 				System.out.print("Enter New Password: ");
 				String newPass = keyboard.next();
 
-				// Needs to save user after change
 				if (currA != null)
 					flag = currA.changePass(oldPass, newPass);
 				else if (currT != null)
@@ -576,18 +510,13 @@ public class Prototype
 		while (option != 2);
 	}
 
-	public static void modifyClass(Class c)
-	{
-	}
-
 
 	public static void classCreator()
 		{
 			int id;
-			String desc;
+			String desc = "";
 			String title;
-			Teacher nTeacher = null;
-			String s = "";
+			int nTeacher;
 
 			System.out.println("\nCreate Class\n");
 
@@ -595,21 +524,37 @@ public class Prototype
 			id = keyboard.nextInt();
 			System.out.print("Enter the Course Title: ");
 			title = keyboard.next();
-			System.out.print("Enter a Brief Course Description: ");
-			desc = keyboard.next();
+			System.out.print("Enter a Breif Course Description: ");
+			while(desc.equals(""))
+			{
+				desc = keyboard.nextLine();
+			}
+			System.out.print("Enter the ID of the teacher teaching this course: ");
+			nTeacher = keyboard.nextInt();
 
+			Teacher tempT = utility.openTeacher(nTeacher);
+			if (tempT != null)
+			{
+				utility.writeClass(id, title, desc, nTeacher);
+				System.out.println("\nClass Created\n");
+			}
+			else
+			{
+				System.out.println("\nClass not created\n");
+			}
+			/*
 			if (t != null)
-			{	
+			{
 				do
 				{
 					System.out.println("\nPick a teacher\n");
-		
+
 					for (int j = 0; j < t.size(); j++)
 					{
 						nTeacher = t.get(j);
 						s += "\t(" + (j+1) + ") " + nTeacher + "\n";
 					}
-		
+
 					System.out.print(s + "\nEnter the Teacher ID: ");
 					int tId = keyboard.nextInt();
 
@@ -619,19 +564,11 @@ public class Prototype
 							nTeacher = t.get(j);
 					}
 				}
-				while (nTeacher == null); 
+				while (nTeacher == null);
 			}
 			else
 				System.out.print("\nNo teachers found\n");
-			
-			if (nTeacher != null)
-			{
-				Class newClass = new Class(id, title, desc, nTeacher);
-				currA.addClass(newClass); //Save class, admin, and teacher
-				nTeacher.addClass(newClass); 
-				System.out.println("\nClass Created\n");
-			}
-			else
-				System.out.println("\nClass not created\n");
+			*/
+
 	}
 }

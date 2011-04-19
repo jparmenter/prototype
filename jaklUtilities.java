@@ -4,7 +4,7 @@ import java.sql.*;
 
 public class jaklUtilities
 {
-	private String url = "jdbc:postgresql://68.98.104.148:5432/test"; //NEED TO CHANGE
+	private String url = "jdbc:postgresql://68.98.104.148:5432/jitt"; //NEED TO CHANGE
 
 	public jaklUtilities()
 	{
@@ -18,7 +18,7 @@ public class jaklUtilities
 		}
 	}
 
-	public void writeUser(int id, String name, String pass, char acctType)
+	public void writeAdmin(int id, String name, String pass, char acctType)
 	{
 		 try
 		 {
@@ -27,12 +27,12 @@ public class jaklUtilities
 
 			// Establish the connection to the database
 			//String url = "jdbc:postgresql://localhost:5432/jakl";
-			Connection conn = DriverManager.getConnection(url,"postgres","pass");
+			Connection conn = DriverManager.getConnection(url,"postgres","jakl");
 
 			//This is how you write. just create a statement and execute a sql query.
 
 			Statement st = conn.createStatement();
-			st.execute("INSERT INTO users\nVALUES\n(" + id + ", '" + name + "', '" + pass + "'" + acctType + "');");
+			st.execute("INSERT INTO \"user\"\nVALUES\n(" + id + ", '" + name + "', '" + pass + "', '" + acctType + "');");
 
 			conn.close();
 
@@ -45,8 +45,10 @@ public class jaklUtilities
 		 }
 	}
 
-	public void showUsers()
+	public Admin openAdmin(int id)
 	{
+		String strUser = null;
+		String strPass = null;
 		try
 		{
 			//java.lang.Class.forName("org.postgresql.Driver");
@@ -55,35 +57,183 @@ public class jaklUtilities
 			Connection conn = DriverManager.getConnection(url,"postgres","jakl");
 
 		   Statement stmt = conn.createStatement();
-		   ResultSet rs = stmt.executeQuery("SELECT * FROM users");
-		   ResultSetMetaData rsmd = rs.getMetaData();
-		   int numberOfColumns = rsmd.getColumnCount();
-		   int rowCount = 1;
-
-		   	while (rs.next())
-		   	{
-		   		System.out.println("Line " + rowCount + ":");
-		   		for (int i = 1; i <= numberOfColumns; i++)
-		   		{
-		   			System.out.print("   Col " + i + ":  ");
-		   			System.out.println(rs.getString(i));
-		   		}
-
-		   		System.out.println("");
-		   		rowCount++;
-			}
-
-			rs.close();
-			//rsmd.close();
+		   ResultSet user = stmt.executeQuery("SELECT username from \"user\" WHERE id=" + id);
+		   ResultSetMetaData rsmd1 = user.getMetaData();
+		   while (user.next())
+		   {
+			   strUser = user.getString(1);
+		   }
+		   user.close();
+		   ResultSet pass = stmt.executeQuery("SELECT pass from \"user\" WHERE id=" + id);
+		   ResultSetMetaData rsmd2 = pass.getMetaData();
+		   while (pass.next())
+		   {
+			   strPass = pass.getString(1);
+		   }
+			pass.close();
 			conn.close();
+
 		}
 		catch (Exception e)
 		{
 			System.out.println(e.getMessage());
 		}
+		Admin admin = new Admin(id, strUser, strPass);
+		return admin;
 	}
 
-	public void writeClass(int id, String name, String description)
+	public void writeTeacher(int id, String name, String pass, char acctType)
+		{
+			 try
+			 {
+				// Load the JDBC driver.
+				//java.lang.Class.forName("org.postgresql.Driver");
+
+				// Establish the connection to the database
+				//String url = "jdbc:postgresql://localhost:5432/jakl";
+				Connection conn = DriverManager.getConnection(url,"postgres","jakl");
+
+				//This is how you write. just create a statement and execute a sql query.
+
+				Statement st = conn.createStatement();
+				st.execute("INSERT INTO \"user\"\nVALUES\n(" + id + ", '" + name + "', '" + pass + "', '" + acctType + "');");
+
+				conn.close();
+
+			}
+
+			 catch (Exception e)
+			 {
+			   System.out.println("Got an exception! ");
+			   System.out.println(e.getMessage());
+			 }
+	}
+
+	public Teacher openTeacher(int id)
+		{
+			String strUser = null;
+			String strPass = null;
+			String strType = null;
+			Character charType;
+			try
+			{
+				//java.lang.Class.forName("org.postgresql.Driver");
+
+				//String url = "jdbc:postgresql://localhost:5432/jakl";
+				Connection conn = DriverManager.getConnection(url,"postgres","jakl");
+
+			   Statement stmt = conn.createStatement();
+			   ResultSet user = stmt.executeQuery("SELECT username from \"user\" WHERE id=" + id);
+			   ResultSetMetaData rsmd1 = user.getMetaData();
+			   while (user.next())
+			   {
+				   strUser = user.getString(1);
+			   }
+			   user.close();
+			   ResultSet pass = stmt.executeQuery("SELECT pass from \"user\" WHERE id=" + id);
+			   ResultSetMetaData rsmd2 = pass.getMetaData();
+			   while (pass.next())
+			   {
+				   strPass = pass.getString(1);
+			   }
+				pass.close();
+
+			   ResultSet type = stmt.executeQuery("SELECT acctype from \"user\" WHERE id=" + id);
+			   ResultSetMetaData rsmd3 = type.getMetaData();
+			   while (type.next())
+			   {
+				   strType = type.getString(1);
+			   }
+			   type.close();
+			   conn.close();
+
+			charType = strType.charAt(0);
+			if (charType == 't')
+			{
+				Teacher teach = new Teacher(id, strUser, strPass);
+				return teach;
+			}
+			else
+			{
+				System.out.println("You must enter in a teacher ID");
+				return null;
+			}
+
+			}
+			catch (Exception e)
+			{
+				System.out.println(e.getMessage());
+				return null;
+			}
+
+		}
+
+		public void writeStudent(int id, String name, String pass, char acctType)
+			{
+				 try
+				 {
+					// Load the JDBC driver.
+					//java.lang.Class.forName("org.postgresql.Driver");
+
+					// Establish the connection to the database
+					//String url = "jdbc:postgresql://localhost:5432/jakl";
+					Connection conn = DriverManager.getConnection(url,"postgres","jakl");
+
+					//This is how you write. just create a statement and execute a sql query.
+
+					Statement st = conn.createStatement();
+					st.execute("INSERT INTO \"user\"\nVALUES\n(" + id + ", '" + name + "', '" + pass + "', '" + acctType + "');");
+
+					conn.close();
+
+				}
+
+				 catch (Exception e)
+				 {
+				   System.out.println("Got an exception! ");
+				   System.out.println(e.getMessage());
+				 }
+			}
+
+			public Student openStudent(int id)
+			{
+				String strUser = null;
+				String strPass = null;
+				try
+				{
+					//java.lang.Class.forName("org.postgresql.Driver");
+
+					//String url = "jdbc:postgresql://localhost:5432/jakl";
+					Connection conn = DriverManager.getConnection(url,"postgres","jakl");
+
+				   Statement stmt = conn.createStatement();
+				   ResultSet user = stmt.executeQuery("SELECT username from \"user\" WHERE id=" + id);
+				   ResultSetMetaData rsmd1 = user.getMetaData();
+				   while (user.next())
+				   {
+					   strUser = user.getString(1);
+				   }
+				   user.close();
+				   ResultSet pass = stmt.executeQuery("SELECT pass from \"user\" WHERE id=" + id);
+				   ResultSetMetaData rsmd2 = pass.getMetaData();
+				   while (pass.next())
+				   {
+					   strPass = pass.getString(1);
+				   }
+					pass.close();
+					conn.close();
+
+				}
+				catch (Exception e)
+				{
+					System.out.println(e.getMessage());
+				}
+				Student student = new Student(id, strUser, strPass);
+				return student;
+			}
+
+
+	public void writeClass(int id, String name, String description, int teacher)
 	{
 		 try
 		 {
@@ -92,7 +242,7 @@ public class jaklUtilities
 			//This is how you write. just create a statement and execute a sql query.
 
 			Statement st = conn.createStatement();
-			st.execute("INSERT INTO classes\nVALUES\n(" + id + ", '" + name + "', '" + description + "', NULL, NULL);");
+			st.execute("INSERT INTO \"class\"\nVALUES\n(" + id + ", '" + name + "', '" + description + "', NULL," + teacher + ")");
 
 			conn.close();
 
@@ -112,7 +262,7 @@ public class jaklUtilities
 		   Connection conn = DriverManager.getConnection(url,"postgres","jakl");
 
 		   Statement stmt = conn.createStatement();
-		   ResultSet rs = stmt.executeQuery("SELECT * FROM classes WHERE id=" + teacherId + "");
+		   ResultSet rs = stmt.executeQuery("SELECT * FROM class WHERE id=" + teacherId + "");
 		   ResultSetMetaData rsmd = rs.getMetaData();
 		   int numberOfColumns = rsmd.getColumnCount();
 		   int rowCount = 1;
