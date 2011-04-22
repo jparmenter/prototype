@@ -4,29 +4,29 @@ public class Class {
 	private int id;
 	private String title;
 	private String desc;
-	private Teacher teacher;
-	private Vector<Quiz> quiz;
-	private Vector<User> roster;
-	
-	public Class(int _id, String _title, String _desc, Teacher _teacher)
+	private int teacherId;
+	//private Vector<Quiz> quiz;
+	//private Vector<User> roster;
+
+	public Class(int _id, String _title, String _desc, int _teacherId)
 	{
 		id = _id;
 		title = _title;
 		desc = _desc;
-		teacher = _teacher;
-		quiz = null;
-		roster = null; 
+		teacherId = _teacherId;
+		//quiz = null;
+		//roster = null;
 	}
 
 	public void changeDesc(String nDesc)
 	{
 		desc = nDesc;
 	}
-	
-	public void addQuiz(Quiz _quiz)
+
+	/*public void addQuiz(Quiz _quiz)
 	{
 		if (quiz == null)
-			quiz = new Vector<Quiz>();
+			//quiz = new Vector<Quiz>();
 
 		quiz.add(_quiz);
 	}
@@ -37,9 +37,9 @@ public class Class {
 			roster = new Vector<User>();
 
 		roster.add(student);
-	}
+	}*/
 
-	public void changeTeacher(Teacher newTeacher)
+	/*public void changeTeacher(Teacher newTeacher)
 	{
 		int i = 0;
 		Vector<Class> c = teacher.getClasses();
@@ -52,15 +52,16 @@ public class Class {
 		while(id != rmClass.getId());
 
 		c.remove(i);
-		teacher = newTeacher;	
+		teacher = newTeacher;
 	}
+	*/
 
-	public Teacher getTeacher()
+	public int getTeacher()
 	{
-		return teacher;
+		return teacherId;
 	}
 
-	public Vector<Quiz> getQuiz()
+	/*public Vector<Quiz> getQuiz()
 	{
 		return quiz;
 	}
@@ -68,7 +69,7 @@ public class Class {
 	public Vector<User> getRoster()
 	{
 		return roster;
-	}
+	}*/
 
 	public int getId()
 	{
