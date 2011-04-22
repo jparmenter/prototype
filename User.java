@@ -28,6 +28,24 @@ abstract public class User
 		return false;
 	}
 
+	public void showClassIds()
+	{
+		int index = 0;
+		while(index < classList.size())
+		{
+			System.out.println(classList.get(index).toString());
+			index++;
+		}
+	}
+
+	public int showClassId(int index)
+	{
+
+			return classList.get(index);
+
+	}
+
+
 	/*public void addClass(Class _c)
 	{
 		if (c == null)
