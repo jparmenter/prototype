@@ -2,12 +2,6 @@ import java.util.Vector;
 
 public class Student extends User
 {
-	private int id;
-	private String name;
-	private String pass;
-	//private Vector<Integer> classList;
-	//private Vector<Integer> grades;
-	private char status;
 
 	public Student(int _id, String _name, String _pass)
 	{
@@ -15,6 +9,18 @@ public class Student extends User
 		status = 's';
 		classList = new Vector<Integer>(); // might as well instanciate it
 		//grades = null;
+	}
+
+	public Student(int _id, String _name, String _pass, int[] tempClassArray)
+	{
+		super(_id, _name, _pass);
+		status = 's';
+		classList = new Vector<Integer>();
+
+		for(int i = 0; i < tempClassArray.length;i++)
+		{
+			classList.add(i, tempClassArray[i]);
+		}
 	}
 
 	//public void modifyGrade(int classNmbr, int grade)
