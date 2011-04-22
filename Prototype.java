@@ -220,40 +220,39 @@ public class Prototype
 	}
 
 	public static void classMenu()
-	{
-		String s = "\n\tClass Menu\n\n";
-		int i, option = 0;
-		Vector<Class> c = null;
-
-		// Change when getClass is fixed
-		//if (curr.getClasses() != null)
-			c = null;//curr.getClasses();
-
-		if (c != null)
 		{
-			for (i = 0; i < c.size(); i++)
+			String s = "\n\tClass Menu\n\n";
+			//curr.showClassIds();
+			int i, option = 0;
+
+			//c = null;//curr.getClasses();
+
+			if (curr.classList.get(0) != null)
 			{
-				s += "\t(" + (i+1) + ") " + c.get(i) + "\n";
+				for (i = 0; i < curr.classList.size(); i++)
+				{															//c.get(i) replaced with printTitle from table
+					s += "\t(" + (i+1) + ") " + curr.showClassId(i) + "\n";
+				}
+
+				s += "\t(" + ++i + ") " + "Back\n" + "\nEnter Option or classId: ";
+
+				do
+				{
+					System.out.print(s);
+					option = keyboard.nextInt();
+
+					if ((option > 0))            // user enters id and instanciate it
+						visitClass(utility.openClass(option));             //instanciate selected class here (open from db)
+
+				} while (option != i);
+
 			}
+			else
+				System.out.println(s + "No classes to display\n");
 
-			s += "\t(" + ++i + ") " + "Back\n" + "\nEnter Option: ";
-
-			do
-			{
-				System.out.print(s);
-				option = keyboard.nextInt();
-
-				if ((option > 0) && (option < i))
-					visitClass(c.get(--option));
-
-			} while (option != i);
 
 		}
-		else
-			System.out.println(s + "No classes to display\n");
 
-
-	}
 
 	public static void visitClass(Class currClass)
 	{
@@ -389,7 +388,7 @@ public class Prototype
 
 	public static void takeQuiz(Quiz quiz)
 	{
-		Vector<String> sAnswers = new Vector<String>();
+		/*Vector<String> sAnswers = new Vector<String>();
 		Vector<Question> question = quiz.getQuestion();
 		System.out.println("\n" + quiz.getTitle() + "\n");
 		String s;
@@ -409,9 +408,9 @@ public class Prototype
 			sAnswers.add((answers.get(--choice)).getStmt());
 		}
 
-		int grade = quiz.grade(sAnswers);
+		//int grade = quiz.grade(sAnswers);
 		System.out.println("\n" + grade + "\n");
-		//curr.modifyGrade(1, grade);
+		//curr.modifyGrade(1, grade);*/
 	}
 
 	public static void accountManagement()
