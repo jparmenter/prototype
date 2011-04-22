@@ -3,32 +3,22 @@ import java.util.*;
 public class Prototype
 {
 	public static Scanner keyboard;
-	// What Our file system would do
-	public static Vector<Admin> a;
-	public static Vector<Teacher> t;
-	public static Vector<User> s;
-	// So we know what is logged in
-	public static Admin currA;
-	public static User currS;
-	public static Teacher currT;
 	public static jaklUtilities utility;
+	public static User curr;
+	public static Vector<User> u;
+
 
 	public static void main (String [] args)
 	{
 		keyboard = new Scanner(System.in);
-		a = new Vector<Admin>();
-		t = new Vector<Teacher>();
-		s = new Vector<User>();
-		//Admin admin = new Admin(1234, "Jeremy", "password");
-		//Teacher teacher = new Teacher(1111, "Bob", "software");
-		//User student = new User(2222, "James", "progit");
+		u = new Vector<User>();
+		User admin = new Admin(1234, "Jeremy", "password");
+		User teacher = new Teacher(1111, "Bob", "software");
+		User student = new Student(2222, "James", "progit");
 		//Class nClass = new Class(272111, "CSE 110 Intro to Java", "This class teaches you java", teacher);
-		//admin.addClass(nClass);
-		//student.addClass(nClass);
-		//teacher.addClass(nClass);
-		//a.add(admin);
-		//s.add(student);
-		//t.add(teacher);
+		u.add(admin);
+		u.add(student);
+		u.add(teacher);
 		Vector<Answer> answers = new Vector<Answer>();
 		Answer ans = new Answer("2009", false);
 		answers.add(ans);
@@ -42,11 +32,8 @@ public class Prototype
 		Quiz quiz1 = new Quiz("Quiz 1", question);
 		//nClass.addQuiz(quiz1);
 		utility = new jaklUtilities();
-		char adminChar = 'a';
 
-		currA = null;
-		currS = null;
-		currT = null;
+		curr = null;
 
 		login();
 	}
@@ -57,6 +44,7 @@ public class Prototype
 		int id = 0, option = 0;
 		String pass = "";
 		String error;
+		User temp;
 
 		System.out.println("\tLog Screen\n");
 
@@ -80,58 +68,27 @@ public class Prototype
 				* said id */
 
 				char test = (Integer.toString(id)).charAt(0);
-				if (test == '1')
-				{
-					Admin tempA = utility.openAdmin(id);
 
-					if ((tempA != null) && (pass.compareTo(tempA.getPass()) == 0))
+				//DB version
+				temp = utility.openUser(id);
+
+				if ((temp != null) && (pass.compareTo(temp.getPass()) == 0))
+					curr = temp;
+				else
+					System.out.println("\nError: Enter correct id or password\n");
+
+				// w/o DB
+				/*if (u != null)
+					for (int i = 0; i < u.size(); i++)
 					{
-						currA = tempA;
-					}
-					else
-						System.out.println("\nError: Enter correct id or password\n");
-				}
-				else if (test == '2')
-				{
-					Teacher tempT = utility.openTeacher(id);
+						temp = u.get(i);
+						if ((temp.getId() == id) && (pass.compareTo(temp.getPass()) == 0))
+							curr = temp;
+					}*/
 
-					if ((tempT != null) && (pass.compareTo(tempT.getPass()) == 0))
-					{
-						currT = tempT;
-					}
-					else
-						System.out.println("\nError: Enter correct id or password\n");
-				}
-				/*else if (test == '3')
-					// currS = open student
 
-				if ((currA != null) || (currT != null) || (currS != null))
-					s = "\nError: Wrong Id entered.\n";*/
-				if (a != null)
-					for (int i = 0; i < a.size(); i++)
-					{
-						Admin tempA = a.get(i);
 
-						if ((tempA.getId() == id) && (pass.compareTo(tempA.getPass()) == 0))
-							currA = tempA;
-					}
-
-				if (t != null)
-					for (int i = 0; i < t.size(); i++)
-					{
-						Teacher tempT = t.get(i);
-						if ((tempT.getId() == id) && (pass.compareTo(tempT.getPass()) == 0))
-							currT = tempT;
-					}
-
-				if (s != null)
-					for (int i = 0; i < s.size(); i++)
-					{
-						User tempS = s.get(i);
-						if ((tempS.getId() == id) && (pass.compareTo(tempS.getPass()) == 0))
-							currS = tempS;
-					}
-				if ((currA != null) || (currT != null) || (currS != null))
+				if (curr != null)
 					mainMenu();
 				else
 					System.out.println("\nError: Enter correct id or password\n");
@@ -148,20 +105,13 @@ public class Prototype
 		int option = 0;
 		String s = "\n\tMain Menu\n\n";
 
-		s += "Hello, ";
-
-		if (currA != null)
-			s += currA.getName();
-		else if (currT != null)
-			s += currT.getName();
-		else if (currS != null)
-			s += currS.getName();
+		s += "Hello, " + curr.getName();
 
 
 		s += "\n\nEnter the following to view:\n" + "\t(1) Logout\n" +
 			"\t(2) Class\n" + "\t(3) Account Management\n";
 
-		if (currA != null)
+		if (curr.getStatus() == 'a')
 		{
 			s += "\t(4) Create Admin\n" +
 				"\t(5) Create Teacher\n" +
@@ -176,7 +126,7 @@ public class Prototype
 			System.out.print(s);
 			option = keyboard.nextInt();
 
-			if (currA != null)
+			if (curr.getStatus() == 'a')
 				switch(option)
 				{
 					case 2:
@@ -214,9 +164,7 @@ public class Prototype
 
 		} while (option != 1);
 
-		currA = null;
-		currT = null;
-		currS = null;
+		curr = null;
 	}
 
 	public static void create(char userType)
@@ -257,8 +205,9 @@ public class Prototype
 
 			if (userType == 's')
 			{
-				User student = new User(id, name, pass);
-				s.add(student);
+				Student student = new Student(id, name, pass);
+				//u.add(student);
+				utility.writeStudent(id, name, pass, 's'); //Write student should change
 				System.out.println("\nStudent Added Pass: " + (student.getPass()) + "\n");
 			}
 		}
@@ -272,22 +221,9 @@ public class Prototype
 		int i, option = 0;
 		Vector<Class> c = null;
 
-		if (currA != null)
-		{
-			if (currA.getClasses() != null)
-				c = currA.getClasses();
-
-		}
-		else if (currT != null)
-		{
-			if (currT.getClasses() != null)
-				c = currT.getClasses();
-		}
-		else if (currS != null)
-		{
-			if (currS.getClasses() != null)
-				c = currS.getClasses();
-		}
+		// Change when getClass is fixed
+		//if (curr.getClasses() != null)
+			c = null;//curr.getClasses();
 
 		if (c != null)
 		{
@@ -322,7 +258,7 @@ public class Prototype
 				"\t(" + i++ + ") " + "View Quizzes\n" +
 				"\t(" + i++ + ") " + "View Grades\n";
 
-		if (currA != null)
+		if (curr.getStatus() == 'a')
 		{
 			s += "\t(" + i++ + ") " + "Modify Roster\n" +
 				"\t(" + i++ + ") " + "Change Teacher\n";
@@ -330,7 +266,7 @@ public class Prototype
 
 
 		}
-		else if (currT != null)
+		else if (curr.getStatus() == 't')
 		{
 			s += "\t(" + i++ + ") " + "Modify Roster\n";
 		}
@@ -353,22 +289,22 @@ public class Prototype
 					System.out.println("View Grades");
 					break;
 				case 3:
-					if ((currA != null) || (currT != null))
+					if (curr.getStatus() != 's')
 						System.out.println("Modify Roster");
 					else
 						option = 5;
 					break;
 				case 4:
-					if (currA != null)
+					if (curr.getStatus() == 'a')
 						System.out.println("Change Teacher");
-					else if (currT != null)
+					else if (curr.getStatus() == 't')
 						option = 5;
-					else if (currS != null)
+					else if (curr.getStatus() == 's')
 						System.out.println("\nEnter a correct option\n");
 
 					break;
 				case 5:
-					if ((currT != null) || (currS != null))
+					if (curr.getStatus() != 'a')
 						System.out.println("\nEnter a correct option\n");
 					break;
 				default:
@@ -421,7 +357,8 @@ public class Prototype
 		System.out.println("\n" + quiz + "\n");
 		String s;
 		int option;
-		if (currS != null)
+
+		if (curr.getStatus() == 's')
 			s = "\t(1) Take Quiz\n";
 		else
 			s = "\t(1) Modify Quiz\n";
@@ -434,7 +371,7 @@ public class Prototype
 			option = keyboard.nextInt();
 			if (option == 1)
 			{
-				if (currS != null)
+				if (curr.getStatus() == 's')
 					takeQuiz(quiz);
 				else
 					System.out.println("\nModify Quiz!\n"); //modifyQuiz(quiz);
@@ -470,7 +407,7 @@ public class Prototype
 
 		int grade = quiz.grade(sAnswers);
 		System.out.println("\n" + grade + "\n");
-		currS.modifyGrade(1, grade);
+		//curr.modifyGrade(1, grade);
 	}
 
 	public static void accountManagement()
@@ -492,12 +429,7 @@ public class Prototype
 				System.out.print("Enter New Password: ");
 				String newPass = keyboard.next();
 
-				if (currA != null)
-					flag = currA.changePass(oldPass, newPass);
-				else if (currT != null)
-					flag = currT.changePass(oldPass, newPass);
-				else
-					flag = currS.changePass(oldPass, newPass);
+				flag = curr.changePass(oldPass, newPass);
 
 				if (flag)
 					System.out.println("\nPassword Change was successful");
@@ -513,7 +445,7 @@ public class Prototype
 
 	public static void classCreator()
 		{
-			int id;
+/*			int id;
 			String desc = "";
 			String title;
 			int nTeacher;

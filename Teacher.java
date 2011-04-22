@@ -12,13 +12,14 @@ import java.util.*;
 
 public class Teacher extends User
 {
-
-	public static Vector<Class> classList;
+	private jaklUtilities utility = new jaklUtilities();
+	//public static Vector<Class> classList;
 
 	public Teacher(int _id, String _name, String _pass)
 	{
-		super(_id, _name, _pass, 't');
-		classList = new Vector<Class>();
+		super(_id, _name, _pass);
+		status = 't';
+		classList = new Vector<Integer>(); // might as well instanciate it
 	}
 
 	public void createQuiz()
@@ -26,10 +27,9 @@ public class Teacher extends User
 		return;
 	}
 
-	public User createStudents(int id, String name, String pass)
+	public void createStudents(int id, String name, String pass, int classIdToAdd)
 	{
-		User student = new User(id, name, pass);
-		return student;
+		utility.writeStudent(id,name,pass,'s');
 	}
 
 	public String toString()
@@ -37,7 +37,7 @@ public class Teacher extends User
 		return "\n\nTeacher: " + super.toString();
 	}
 
-	public void addClass()
+	public void addClass(Class c)
 	{
 		//ADD
 	}

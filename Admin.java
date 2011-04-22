@@ -7,12 +7,13 @@
 /*
 *	TODO: create class?
 */
-public class Admin extends User 
+public class Admin extends User
 {
 	public Admin(int _id, String _name, String _pass)
 	{
-		super(_id, _name, _pass, 'a');
-	}	
+		super(_id, _name, _pass);
+		status = 'a';
+	}
 
 	public void createClass()
 	{
@@ -27,7 +28,7 @@ public class Admin extends User
 
 	public Teacher createTeacher(int id, String name, String pass)
 	{
-		Teacher teacher = new Teacher(id, name, pass);	
+		Teacher teacher = new Teacher(id, name, pass);
 		return teacher;
 	}
 
