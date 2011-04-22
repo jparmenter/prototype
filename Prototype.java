@@ -115,7 +115,8 @@ public class Prototype
 		{
 			s += "\t(4) Create Admin\n" +
 				"\t(5) Create Teacher\n" +
-				"\t(6) Create Class\n";
+				"\t(6) Create Student\n" +
+				"\t(7) Create Class\n";
 		}
 
 		s += "\nEnter a number: ";
@@ -142,6 +143,9 @@ public class Prototype
 						create('t');
 						break;
 					case 6:
+						create('s');
+						break;
+					case 7:
 						classCreator();
 						break;
 					default:
@@ -413,7 +417,6 @@ public class Prototype
 	public static void accountManagement()
 	{
 		int option = 0;
-		boolean flag;
 
 		do
 		{
@@ -429,12 +432,7 @@ public class Prototype
 				System.out.print("Enter New Password: ");
 				String newPass = keyboard.next();
 
-				flag = curr.changePass(oldPass, newPass);
-
-				if (flag)
-					System.out.println("\nPassword Change was successful");
-				else
-					System.out.println("\nCurrent Password is incorrect");
+				utility.changePass(curr.getId(), curr.getName(), oldPass, newPass);
 			}
 			else if (option != 2)
 				System.out.println("\nEnter a correct option.");
@@ -448,7 +446,7 @@ public class Prototype
 			int id;
 			String desc = "";
 			String title;
-			int nTeacher;
+			int nUser;
 
 			System.out.println("\nCreate Class\n");
 
@@ -462,12 +460,12 @@ public class Prototype
 				desc = keyboard.nextLine();
 			}
 			System.out.print("Enter the ID of the teacher teaching this course: ");
-			nTeacher = keyboard.nextInt();
+			nUser = keyboard.nextInt();
 
-			Teacher tempT = utility.openTeacher(nTeacher);
-			if (tempT != null)
+			User tempU = utility.openUser(nUser);
+			if (tempU != null)
 			{
-				utility.writeClass(id, title, desc, nTeacher);
+				utility.writeClass(id, title, desc, nUser);
 				System.out.println("\nClass Created\n");
 			}
 			else
