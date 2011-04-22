@@ -11,25 +11,25 @@ public class Prototype
 	public static void main (String [] args)
 	{
 		keyboard = new Scanner(System.in);
-		u = new Vector<User>();
-		User admin = new Admin(1234, "Jeremy", "password");
-		User teacher = new Teacher(1111, "Bob", "software");
-		User student = new Student(2222, "James", "progit");
+		//u = new Vector<User>();
+		//User admin = new Admin(1234, "Jeremy", "password");
+		//User teacher = new Teacher(1111, "Bob", "software");
+		//User student = new Student(2222, "James", "progit");
 		//Class nClass = new Class(272111, "CSE 110 Intro to Java", "This class teaches you java", teacher);
-		u.add(admin);
-		u.add(student);
-		u.add(teacher);
-		Vector<Answer> answers = new Vector<Answer>();
-		Answer ans = new Answer("2009", false);
-		answers.add(ans);
-		ans = new Answer("2010", false);
-		answers.add(ans);
-		ans = new Answer("2011", true);
-		answers.add(ans);
-		Vector<Question> question = new Vector<Question>();
-		Question q = new Question("What year is it?", answers);
-		question.add(q);
-		Quiz quiz1 = new Quiz("Quiz 1", question);
+		//u.add(admin);
+		//u.add(student);
+		//u.add(teacher);
+		//Vector<Answer> answers = new Vector<Answer>();
+		//Answer ans = new Answer("2009", false);
+		//answers.add(ans);
+		//ans = new Answer("2010", false);
+		//answers.add(ans);
+		//ans = new Answer("2011", true);
+		//answers.add(ans);
+		//Vector<Question> question = new Vector<Question>();
+		//Question q = new Question("What year is it?", answers);
+		//question.add(q);
+		//Quiz quiz1 = new Quiz("Quiz 1", question);
 		//nClass.addQuiz(quiz1);
 		utility = new jaklUtilities();
 
@@ -283,7 +283,7 @@ public class Prototype
 			switch(option)
 			{
 				case 1:
-					listQuizzes(currClass.getQuiz());
+					//listQuizzes(currClass.getQuiz());
 					break;
 				case 2:
 					System.out.println("View Grades");
@@ -445,7 +445,7 @@ public class Prototype
 
 	public static void classCreator()
 		{
-/*			int id;
+			int id;
 			String desc = "";
 			String title;
 			int nTeacher;
@@ -474,8 +474,8 @@ public class Prototype
 			{
 				System.out.println("\nClass not created\n");
 			}
-			/*
-			if (t != null)
+
+			/*if (t != null)
 			{
 				do
 				{
@@ -499,8 +499,7 @@ public class Prototype
 				while (nTeacher == null);
 			}
 			else
-				System.out.print("\nNo teachers found\n");
-			*/
+				System.out.print("\nNo teachers found\n");*/
 
 	}
 }
