@@ -19,12 +19,24 @@ public class Teacher extends User
 	{
 		super(_id, _name, _pass);
 		status = 't';
-		classList = new Vector<Integer>(); // might as well instanciate it
+		classList = new Vector<Integer>();
+	}
+
+	public Teacher(int _id, String _name, String _pass, int[] tempClassArray)
+	{
+		super(_id, _name, _pass);
+		status = 't';
+		classList = new Vector<Integer>();
+
+		for(int i = 0; i < tempClassArray.length;i++)
+		{
+			classList.add(i, tempClassArray[i]);
+		}
 	}
 
 	public void createQuiz()
 	{
-		return;
+
 	}
 
 	public void createStudents(int id, String name, String pass, int classIdToAdd)
@@ -37,8 +49,8 @@ public class Teacher extends User
 		return "\n\nTeacher: " + super.toString();
 	}
 
-	public void addClass(Class c)
+	public void createClass(Class c)
 	{
-		//ADD
+		utility.writeClass(c.getId(), c.getTitle(), c.getDesc(), id);
 	}
 }
