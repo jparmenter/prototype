@@ -99,6 +99,7 @@ public class jaklUtilities
 			String strPass = null;
 			String strType = null;
 			Character charType;
+			int numClasses;
 			try
 			{
 				//java.lang.Class.forName("org.postgresql.Driver");
@@ -129,12 +130,13 @@ public class jaklUtilities
 				   strType = type.getString(1);
 			   }
 			   type.close();
-
-			   ResultSet classes = stmt.executeQuery("SELECT class from \"user\" WHERE id=" + id);
+				//SELECT array_to_string(ARRAY[class], ',') FROM "user" WHERE id=9999
+			   ResultSet classes = stmt.executeQuery("SELECT array_to_string(ARRAY[class], ',') from \"user\" WHERE id=" + id);
 			   ResultSetMetaData rsmd4 = classes.getMetaData();
 			   int numRows = rsmd4.getColumnCount();
-			   int[] tempArray = new int[numRows];
-			   classes.next();
+			   numClasses = classes.getInt(1);
+			   int[] tempArray = new int[5];
+			   //classes.next();
 			   for(int temp_index = 1; temp_index <= numRows; temp_index++)
 			   {
 				   //System.out.println(classes.getInt(temp_index));
@@ -156,7 +158,7 @@ public class jaklUtilities
 
 			else
 			{
-				if(numRows > 0)
+				if(numClasses > 0)
 				{
 				Student student = new Student(id,strUser,strPass, tempArray);
 				return student;
@@ -267,16 +269,20 @@ public class jaklUtilities
 		}
 	}
 
-
+*/
 	public void addClass(int classId, int id)
 	{
 		try
 		{
 			Connection conn = DriverManager.getConnection(url,"postgres","jakl");
 			Statement st = conn.createStatement();
-			st.executeUpdate("UPDATE \"user\" SET class = \'" + classId + "\' WHERE id=\'" + id + "\'");
-
-*/
+			st.executeUpdate("UPDATE \"user\" SET class = class || ARRAY["+ classId + "] WHERE id=" + id);
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
+		}
+	}
 
 	public void changePass(int id, String user, String pass, String nPass)
 	{
