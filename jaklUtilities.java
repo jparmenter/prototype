@@ -129,6 +129,17 @@ public class jaklUtilities
 				   strType = type.getString(1);
 			   }
 			   type.close();
+
+			   ResultSet classes = stmt.executeQuery("SELECT class from \"user\" WHERE id=" + id);
+			   ResultSetMetaData rsmd4 = classes.getMetaData();
+			   int numRows = rsmd4.getColumnCount();
+			   int[] tempArray = new int[numRows];
+			   classes.next();
+			   for(int temp_index = 1; temp_index <= numRows; temp_index++)
+			   {
+				   //System.out.println(classes.getInt(temp_index));
+				   tempArray[temp_index-1] = classes.getInt(temp_index);
+			   }
 			   conn.close();
 
 			charType = strType.charAt(0);
@@ -145,8 +156,16 @@ public class jaklUtilities
 
 			else
 			{
+				if(numRows > 0)
+				{
+				Student student = new Student(id,strUser,strPass, tempArray);
+				return student;
+				}
+				else
+				{
 				Student student = new Student(id, strUser,strPass);
 				return student;
+				}
 			}
 			}
 			catch (Exception e)
@@ -247,7 +266,7 @@ public class jaklUtilities
 			System.out.println(e.getMessage());
 		}
 	}
-*/
+
 
 	public void addClass(int classId, int id)
 	{
@@ -256,6 +275,8 @@ public class jaklUtilities
 			Connection conn = DriverManager.getConnection(url,"postgres","jakl");
 			Statement st = conn.createStatement();
 			st.executeUpdate("UPDATE \"user\" SET class = \'" + classId + "\' WHERE id=\'" + id + "\'");
+
+*/
 
 	public void changePass(int id, String user, String pass, String nPass)
 	{
