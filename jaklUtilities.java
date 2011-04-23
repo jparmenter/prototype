@@ -402,6 +402,22 @@ public Quiz openQuiz(int quizId)
 
 		}
 
+		public void writeQuiz(int quizId, String questions, String answers, String correctAnswers)
+		{
+			{
+				try
+				{
+					Connection conn = DriverManager.getConnection(url,"postgres","jakl");
+					Statement st = conn.createStatement();
+					st.executeUpdate("INSERT INTO \"quiz\"\nVALUES\n(" + quizId + ", '" + questions + "', '" + answers + "', '" + correctAnswers + ")");
+				}
+				catch (Exception e)
+				{
+					System.out.println(e.getMessage());
+				}
+			}
+		}
+
 
 	public int[] getClassArray(String str)
 	{
@@ -425,8 +441,8 @@ public Quiz openQuiz(int quizId)
 		return temp;
 	}
 
-}
 
+}
 
 
 
