@@ -227,7 +227,7 @@ public class Prototype
 
 			//c = null;//curr.getClasses();
 
-			if (curr.classList.get(0) != null)
+			if (curr.classList != null)
 			{
 				for (i = 0; i < curr.classList.size(); i++)
 				{															//c.get(i) replaced with printTitle from table
