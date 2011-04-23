@@ -329,9 +329,9 @@ public Quiz openQuiz(int quizId)
 			int tempQuestionNumber;
 			String tempQuestion = null;
 			String tempAnswer1 = null;
-			String tempAnswer1 = null;
-			String tempAnswer1 = null;
-			String tempAnswer1 = null;
+			String tempAnswer2 = null;
+			String tempAnswer3 = null;
+			String tempAnswer4 = null;
 			String tempCorrectAnswer = null;
 
 			try
@@ -341,52 +341,56 @@ public Quiz openQuiz(int quizId)
 			   Statement stmt = conn.createStatement();
 
 			   ResultSet tQuestNum = stmt.executeQuery("SELECT id from \"user\" WHERE id=" + quizId);
-			   while (tQuestNum.next())
-			   {
-				   tempQuestionNumber = tQuestNum.getInt(1);
-			   }
-			   user.close();
+			   tQuestNum.next();
+
+			   tempQuestionNumber = tQuestNum.getInt(1);
+
+			   tQuestNum.close();
 
 			   ResultSet tQuest = stmt.executeQuery("SELECT quest# from \"user\" WHERE id=" + quizId);
 			   while (tQuest.next())
 			   {
 				   tempQuestion = tQuest.getString(1);
 			   }
-				pass.close();
+				tQuest.close();
 
 			   ResultSet ans1 = stmt.executeQuery("SELECT ans1 from \"user\" WHERE id=" + quizId);
 			   while (ans1.next())
 			   {
 				   tempAnswer1 = ans1.getString(1);
 			   }
+			   ans1.close();
 
 			   ResultSet ans2 = stmt.executeQuery("SELECT ans2 from \"user\" WHERE id=" + quizId);
 			   while (ans2.next())
 			   {
 				   tempAnswer2 = ans2.getString(1);
 			   }
+			   ans2.close();
 
 			   ResultSet ans3 = stmt.executeQuery("SELECT ans3 from \"user\" WHERE id=" + quizId);
 			   while (ans3.next())
 			   {
 				   tempAnswer3 = ans3.getString(1);
 			   }
+			   ans3.close();
 
 			   ResultSet ans4 = stmt.executeQuery("SELECT ans4 from \"user\" WHERE id=" + quizId);
 			   while (ans4.next())
 			   {
 				   tempAnswer4 = ans4.getString(1);
 			   }
+			   ans4.close();
 
 			   ResultSet corr = stmt.executeQuery("SELECT correct from \"user\" WHERE id=" + quizId);
 			   while (corr.next())
 			   {
 				   tempCorrectAnswer = corr.getString(1);
 			   }
-			   type.close();
+			   corr.close();
 			   conn.close();
 
-			   Quiz tempQuiz = new Quiz(tempQuestionNumber, tempQuestion, tempAnswer1, tempAnswer2, tempAnswer3, tempAnswer4, tempCorrectAnswer);
+			   Quiz tempQuiz = new Quiz(quizId, tempQuestionNumber, tempQuestion, tempAnswer1, tempAnswer2, tempAnswer3, tempAnswer4, tempCorrectAnswer);
 			   return tempQuiz;
 
 		   }
