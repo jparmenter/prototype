@@ -197,26 +197,39 @@ public class jaklUtilities
 	{
 		 String title = null;
 		 String desc = null;
-		 int teachId;
+		 int teachId = 0;
 		try
 		{
 
 			 Connection conn = DriverManager.getConnection(url,"postgres","jakl");
 			 Statement stmt = conn.createStatement();
 			 ResultSet rs = stmt.executeQuery("SELECT * FROM \"class\" WHERE id=" + courseId);
-			 ResultSetMetaData rsmd = rs.getMetaData();
-			 rs.next();
-			 rs.next();
-			 title = rs.getString(1);
-			 rs.next();
-			 desc = rs.getString(1);
-			 rs.next();
-			 teachId = rs.getInt(1);
-			 rs.close();
+			 ResultSet className = stmt.executeQuery("SELECT classname from \"class\" WHERE id=" + courseId);
+			 ResultSetMetaData rsmd1 = className.getMetaData();
+		     while (className.next())
+		     {
+			   title = className.getString(1);
+		     }
+		     className.close();
 
+		     ResultSet description = stmt.executeQuery("SELECT description from \"class\" WHERE id=" + courseId);
+		     ResultSetMetaData rsmd2 = description.getMetaData();
+		     while (description.next())
+		     {
+		 	   desc = description.getString(1);
+		     }
+		     description.close();
+
+			 ResultSet teacher = stmt.executeQuery("SELECT teacher from \"class\" WHERE id=" + courseId);
+			 ResultSetMetaData rsmd3 = teacher.getMetaData();
+			 while (teacher.next())
+			 {
+			   teachId = teacher.getInt(1);
+			 }
+			 teacher.close();
 			 conn.close();
-			Class tClass = new Class(courseId, title, desc, teachId);
-			return tClass;
+			 Class tClass = new Class(courseId, title, desc, teachId);
+			 return tClass;
 		}
 		catch (Exception e)
 		{
