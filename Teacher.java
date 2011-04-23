@@ -19,6 +19,19 @@ public class Teacher extends User
 	{
 		super(_id, _name, _pass);
 		status = 't';
+		classList = new Vector<Integer>();
+	}
+
+	public Teacher(int _id, String _name, String _pass, int[] tempClassArray)
+	{
+		super(_id, _name, _pass);
+		status = 't';
+		classList = new Vector<Integer>();
+
+		for(int i = 0; i < tempClassArray.length;i++)
+		{
+			classList.add(i, tempClassArray[i]);
+		}
 	}
 
 	public void createQuiz()

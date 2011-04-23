@@ -7,12 +7,29 @@
 /*
 *	TODO: create class?
 */
+
+import java.util.Vector;
+
 public class Admin extends User
 {
+
 	public Admin(int _id, String _name, String _pass)
 	{
 		super(_id, _name, _pass);
 		status = 'a';
+		classList = new Vector<Integer>();
+	}
+
+	public Admin(int _id, String _name, String _pass, int[] tempClassArray)
+	{
+		super(_id, _name, _pass);
+		status = 'a';
+		classList = new Vector<Integer>();
+
+		for(int i = 0; i < tempClassArray.length;i++)
+		{
+			classList.add(i, tempClassArray[i]);
+		}
 	}
 
 	public void createClass()
