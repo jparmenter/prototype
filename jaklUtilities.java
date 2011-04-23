@@ -99,7 +99,7 @@ public class jaklUtilities
 			String strPass = null;
 			String strType = null;
 			Character charType;
-			int numClasses;
+			String numClasses;
 			try
 			{
 				//java.lang.Class.forName("org.postgresql.Driver");
@@ -132,16 +132,9 @@ public class jaklUtilities
 			   type.close();
 				//SELECT array_to_string(ARRAY[class], ',') FROM "user" WHERE id=9999
 			   ResultSet classes = stmt.executeQuery("SELECT array_to_string(ARRAY[class], ',') from \"user\" WHERE id=" + id);
-			   ResultSetMetaData rsmd4 = classes.getMetaData();
-			   int numRows = rsmd4.getColumnCount();
-			   numClasses = classes.getInt(1);
-			   int[] tempArray = new int[5];
-			   //classes.next();
-			   for(int temp_index = 1; temp_index <= numRows; temp_index++)
-			   {
-				   //System.out.println(classes.getInt(temp_index));
-				   tempArray[temp_index-1] = classes.getInt(temp_index);
-			   }
+			   classes.next();
+			   numClasses = classes.getString(1);
+			   int[] tempArray = getClassArray(numClasses);
 			   conn.close();
 
 			charType = strType.charAt(0);
@@ -158,7 +151,7 @@ public class jaklUtilities
 
 			else
 			{
-				if(numClasses > 0)
+				if(tempArray != null)
 				{
 				Student student = new Student(id,strUser,strPass, tempArray);
 				return student;
