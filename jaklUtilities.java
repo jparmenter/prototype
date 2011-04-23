@@ -317,6 +317,29 @@ public class jaklUtilities
 			System.out.println(e.getMessage());
 		}
 	}
+
+	public int[] getClassArray(String str)
+	{
+		Vector<Integer> classListVect = new Vector<Integer>();
+
+		String testString = str;
+		StringTokenizer st = new StringTokenizer(testString, ",");
+
+		while(st.hasMoreTokens())
+		{
+			classListVect.add(Integer.parseInt(st.nextToken()));
+		}
+
+		int[] temp = new int[classListVect.size()];
+
+		for(int i =0; i < classListVect.size(); i++)
+		{
+			temp[i] = classListVect.get(i);
+		}
+
+		return temp;
+	}
+
 }
 
 
