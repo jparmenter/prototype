@@ -324,6 +324,81 @@ public class jaklUtilities
 		}
 	}
 
+public Quiz openQuiz(int quizId)
+		{
+			int tempQuestionNumber;
+			String tempQuestion = null;
+			String tempAnswer1 = null;
+			String tempAnswer1 = null;
+			String tempAnswer1 = null;
+			String tempAnswer1 = null;
+			String tempCorrectAnswer = null;
+
+			try
+			{
+				Connection conn = DriverManager.getConnection(url,"postgres","jakl");
+
+			   Statement stmt = conn.createStatement();
+
+			   ResultSet tQuestNum = stmt.executeQuery("SELECT id from \"user\" WHERE id=" + quizId);
+			   while (tQuestNum.next())
+			   {
+				   tempQuestionNumber = tQuestNum.getInt(1);
+			   }
+			   user.close();
+
+			   ResultSet tQuest = stmt.executeQuery("SELECT quest# from \"user\" WHERE id=" + quizId);
+			   while (tQuest.next())
+			   {
+				   tempQuestion = tQuest.getString(1);
+			   }
+				pass.close();
+
+			   ResultSet ans1 = stmt.executeQuery("SELECT ans1 from \"user\" WHERE id=" + quizId);
+			   while (ans1.next())
+			   {
+				   tempAnswer1 = ans1.getString(1);
+			   }
+
+			   ResultSet ans2 = stmt.executeQuery("SELECT ans2 from \"user\" WHERE id=" + quizId);
+			   while (ans2.next())
+			   {
+				   tempAnswer2 = ans2.getString(1);
+			   }
+
+			   ResultSet ans3 = stmt.executeQuery("SELECT ans3 from \"user\" WHERE id=" + quizId);
+			   while (ans3.next())
+			   {
+				   tempAnswer3 = ans3.getString(1);
+			   }
+
+			   ResultSet ans4 = stmt.executeQuery("SELECT ans4 from \"user\" WHERE id=" + quizId);
+			   while (ans4.next())
+			   {
+				   tempAnswer4 = ans4.getString(1);
+			   }
+
+			   ResultSet corr = stmt.executeQuery("SELECT correct from \"user\" WHERE id=" + quizId);
+			   while (corr.next())
+			   {
+				   tempCorrectAnswer = corr.getString(1);
+			   }
+			   type.close();
+			   conn.close();
+
+			   Quiz tempQuiz = new Quiz(tempQuestionNumber, tempQuestion, tempAnswer1, tempAnswer2, tempAnswer3, tempAnswer4, tempCorrectAnswer);
+			   return tempQuiz;
+
+		   }
+			catch (Exception e)
+			{
+				System.out.println(e.getMessage());
+				return null;
+			}
+
+		}
+
+
 	public int[] getClassArray(String str)
 	{
 		Vector<Integer> classListVect = new Vector<Integer>();
