@@ -241,7 +241,7 @@ public class Prototype
 					System.out.print(s);
 					option = keyboard.nextInt();
 
-					if ((option > 0))            // user enters id and instanciate it
+					if ((option > 0))
 						visitClass(utility.openClass(option));             //instanciate selected class here (open from db)
 
 				} while (option != i);
@@ -286,7 +286,7 @@ public class Prototype
 			switch(option)
 			{
 				case 1:
-					//listQuizzes(currClass.getQuiz());
+					createQuiz();
 					break;
 				case 2:
 					System.out.println("View Grades");
@@ -439,6 +439,90 @@ public class Prototype
 		while (option != 2);
 	}
 
+
+	public static void createQuiz()
+	{
+		try{
+			int quizLength;
+			int index = 0;
+			int quizId;
+
+			System.out.println("\nCreate Quiz\n");
+
+			System.out.print("Enter the quiz Id:");
+			quizId = keyboard.nextInt();
+			System.out.print("Enter the number of questions in this quiz: ");
+			quizLength = keyboard.nextInt();
+
+			String[] theQuestions = new String[quizLength];
+			String[] ans1Array = new String[quizLength];
+			String[] ans2Array = new String[quizLength];
+			String[] ans3Array = new String[quizLength];
+			String[] ans4Array = new String[quizLength];
+			String[] correctAnsArray = new String[quizLength];
+
+			while(index < quizLength)
+			{
+			String questionHolder = "";
+			String ans1Holder = "";
+			String ans2Holder = "";
+			String ans3Holder = "";
+			String ans4Holder = "";
+			String correctAnsHolder = "";
+
+			System.out.print("Enter question" + (index+1) + ":");
+			while(questionHolder.equals(""))
+			{
+				questionHolder = keyboard.nextLine();
+			}
+			System.out.print("Enter Answer 1:");
+
+			while(ans1Holder.equals(""))
+			{
+				ans1Holder = keyboard.nextLine();
+			}
+			System.out.print("Enter Answer 2:");
+
+			while(ans2Holder.equals(""))
+			{
+				ans2Holder = keyboard.nextLine();
+			}
+			System.out.print("Enter Answer 3:");
+
+			while(ans3Holder.equals(""))
+			{
+				ans3Holder = keyboard.nextLine();
+			}
+			System.out.print("Enter Answer 4:");
+
+			while(ans4Holder.equals(""))
+			{
+				ans4Holder = keyboard.nextLine();
+			}
+			System.out.print("Enter Correct Answer:");
+			while(correctAnsHolder.equals(""))
+			{
+				correctAnsHolder = keyboard.nextLine();
+			}
+
+			theQuestions[index] = questionHolder;
+			ans1Array[index] = ans1Holder;
+			ans2Array[index] = ans2Holder;
+			ans3Array[index] = ans3Holder;
+			ans4Array[index] = ans4Holder;
+			correctAnsArray[index] = correctAnsHolder;
+
+			index++;
+			}
+			System.out.println("before data stuff");
+			utility.writeQuiz(quizId, theQuestions, ans1Array, ans2Array, ans3Array, ans4Array, correctAnsArray);
+		}
+		catch(Exception e)
+		{
+				System.out.println("catch");
+				System.out.println(e.getMessage());
+		}
+	}
 
 	public static void classCreator()
 		{

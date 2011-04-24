@@ -140,8 +140,16 @@ public class jaklUtilities
 			charType = strType.charAt(0);
 			if (charType == 't')
 			{
+				if(tempArray != null)
+				{
+				Teacher teach = new Teacher(id, strUser, strPass, tempArray);
+				return teach;
+				}
+				else
+				{
 				Teacher teach = new Teacher(id, strUser, strPass);
 				return teach;
+				}
 			}
 			else if (charType == 'a')
 			{
@@ -350,47 +358,47 @@ public Quiz openQuiz(int quizId)
 			   ResultSet tQuest = stmt.executeQuery("SELECT array_to_string(ARRAY[question], ',') from \"quiz\" WHERE id=" + quizId);
 			   while (tQuest.next())
 			   {
-				   tempQuestion = tQuest.getString(1);
+				   tempQuestion = getQuizArray(tQuest.getString(1));
 			   }
 				tQuest.close();
 
 			   ResultSet ans1 = stmt.executeQuery("SELECT array_to_string(ARRAY[answer1], ',') from \"quiz\" WHERE id=" + quizId);
 			   while (ans1.next())
 			   {
-				   tempAnswer1 = ans1.getString(1);
+				   tempAnswer1 = getQuizArray(ans1.getString(1));
 			   }
 			   ans1.close();
 
 			   ResultSet ans2 = stmt.executeQuery("SELECT array_to_string(ARRAY[answer2], ',') from \"quiz\" WHERE id=" + quizId);
 			   while (ans2.next())
 			   {
-				   tempAnswer2 = ans2.getString(1);
+				   tempAnswer2 = getQuizArray(ans2.getString(1));
 			   }
 			   ans2.close();
 
 			   ResultSet ans3 = stmt.executeQuery("SELECT array_to_string(ARRAY[answer3], ',') from \"quiz\" WHERE id=" + quizId);
 			   while (ans3.next())
 			   {
-				   tempAnswer3 = ans3.getString(1);
+				   tempAnswer3 = getQuizArray(ans3.getString(1));
 			   }
 			   ans3.close();
 
 			   ResultSet ans4 = stmt.executeQuery("SELECT array_to_string(ARRAY[answer4], ',') from \"quiz\" WHERE id=" + quizId);
 			   while (ans4.next())
 			   {
-				   tempAnswer4 = ans4.getString(1);
+				   tempAnswer4 = getQuizArray(ans4.getString(1));
 			   }
 			   ans4.close();
 
 			   ResultSet corr = stmt.executeQuery("SELECT array_to_string(ARRAY[correct], ',') from \"quiz\" WHERE id=" + quizId);
 			   while (corr.next())
 			   {
-				   tempCorrectAnswer = corr.getString(1);
+				   tempCorrectAnswer = getQuizArray(corr.getString(1));
 			   }
 			   corr.close();
 			   conn.close();
 
-			   Quiz tempQuiz = new Quiz(quizId, tempQuestionNumber, tempQuestion, tempAnswer1, tempAnswer2, tempAnswer3, tempAnswer4, tempCorrectAnswer);
+			   Quiz tempQuiz = new Quiz(quizId, tempQuestion, tempAnswer1, tempAnswer2, tempAnswer3, tempAnswer4, tempCorrectAnswer);
 			   return tempQuiz;
 
 		   }
@@ -402,20 +410,18 @@ public Quiz openQuiz(int quizId)
 
 		}
 
-		public void writeQuiz(int quizId, String[] questions, String[] answers, String[] correctAnswers)
+		public void writeQuiz(int quizId, String[] questions, String[] answers1, String[] answers2, String[] answers3, String[] answers4, String[] correctAnswers)
 		{
-			{
 				try
 				{
 					Connection conn = DriverManager.getConnection(url,"postgres","jakl");
 					Statement st = conn.createStatement();
-					st.executeUpdate("INSERT INTO \"quiz\"\nVALUES\n(" + quizId + ", '{" + questions + "}', '{" + answers + "}', '{" + correctAnswers + "})");
+					st.executeUpdate("INSERT INTO \"quiz\"\nVALUES\n(" + quizId + ", '{" + questions + "}', '{" + answers1 + "}', '{" + answers2 + "}', '{" + answers3 + "}', '{" + answers4 + "}', '{" + correctAnswers + "})");
 				}
 				catch (Exception e)
 				{
 					System.out.println(e.getMessage());
 				}
-			}
 		}
 
 
@@ -441,6 +447,27 @@ public Quiz openQuiz(int quizId)
 		return temp;
 	}
 
+	public String[] getQuizArray(String str)
+	{
+		Vector<String> quizStuff = new Vector<String>();
+
+		String testString = str;
+		StringTokenizer st = new StringTokenizer(testString, ",");
+
+		while(st.hasMoreTokens())
+		{
+			quizStuff.add(st.nextToken());
+		}
+
+		String[] temp = new String[quizStuff.size()];
+
+		for(int i =0; i < quizStuff.size(); i++)
+		{
+			temp[i] = quizStuff.get(i);
+		}
+
+		return temp;
+	}
 
 }
 
