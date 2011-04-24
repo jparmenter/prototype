@@ -4,19 +4,17 @@ public class Quiz
 {
 
 	private int quizId;
-	private int questionNumber;
-	private String question;
-	private String answer1;
-	private String answer2;
-	private String answer3;
-	private String answer4;
-	private String correctAnswer;
+	private String[] question;
+	private String[] answer1;
+	private String[] answer2;
+	private String[] answer3;
+	private String[] answer4;
+	private String[] correctAnswer;
 
-	public Quiz(int temp_quizId, int temp_questionNumber, String temp_question, String temp_ans1, String temp_ans2,
-					String temp_ans3, String temp_ans4, String temp_correctAnswer)
+	public Quiz(int temp_quizId, String[] temp_question, String[] temp_ans1, String[] temp_ans2,
+					String[] temp_ans3, String[] temp_ans4, String[] temp_correctAnswer)
 	{
 		quizId = temp_quizId;
-		questionNumber = temp_questionNumber;
 		question = temp_question;
 		answer1 = temp_ans1;
 		answer2 = temp_ans2;
@@ -51,19 +49,14 @@ public class Quiz
 		return quizId;
 	}
 
-	public int getQuestionNumber()
+	public String toString(int index)
 	{
-		return questionNumber;
+		return index + ":\t" + question[index] + "\n\t" + answer1[index] + "\n\t" + answer2[index] + "\n\t" + answer3[index] + "\n\t" + answer4[index];
 	}
 
-	public String toString()
+	public boolean checkAnswer(String userAnswer, int index)
 	{
-		return questionNumber + ":\t" + question + "\n\t" + answer1 + "\n\t" + answer2 + "\n\t" + answer3 + "\n\t" + answer4;
-	}
-
-	public boolean checkAnswer(String userAnswer)
-	{
-		if(correctAnswer.equals(userAnswer))
+		if(correctAnswer[index].equals(userAnswer))
 			return true;
 		else
 			return false;

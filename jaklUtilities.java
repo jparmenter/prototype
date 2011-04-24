@@ -416,7 +416,7 @@ public Quiz openQuiz(int quizId)
 				{
 					Connection conn = DriverManager.getConnection(url,"postgres","jakl");
 					Statement st = conn.createStatement();
-					st.executeUpdate("INSERT INTO \"quiz\"\nVALUES\n(" + quizId + ", '{" + questions + "}', '{" + answers1 + "}', '{" + answers2 + "}', '{" + answers3 + "}', '{" + answers4 + "}', '{" + correctAnswers + "})");
+					st.executeUpdate("INSERT INTO \"quiz\"\nVALUES\n(" + quizId + ", '{" + questions + "}', '{" + answers1 + "}', '{" + answers2 + "}', '{" + answers3 + "}', '{" + answers4 + "}', '{" + correctAnswers + "}')");
 				}
 				catch (Exception e)
 				{
