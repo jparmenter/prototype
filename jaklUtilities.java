@@ -416,7 +416,7 @@ public Quiz openQuiz(int quizId)
 				{
 					Connection conn = DriverManager.getConnection(url,"postgres","jakl");
 					Statement st = conn.createStatement();
-					st.executeUpdate("INSERT INTO \"quiz\"\nVALUES\n(" + quizId + ", '{" + questions + "}', '{" + answers1 + "}', '{" + answers2 + "}', '{" + answers3 + "}', '{" + answers4 + "}', '{" + correctAnswers + "}')");
+					st.executeUpdate("INSERT INTO \"quiz\"\nVALUES\n(" + quizId + ", '{" + sArrayToString(questions) + "}', '{" + sArrayToString(answers1)+ "}', '{" + sArrayToString(answers2) + "}', '{" + sArrayToString(answers3) + "}', '{" + sArrayToString(answers4) + "}', '{" + sArrayToString(correctAnswers) + "}')");
 				}
 				catch (Exception e)
 				{
@@ -467,6 +467,21 @@ public Quiz openQuiz(int quizId)
 		}
 
 		return temp;
+	}
+
+	public String sArrayToString(String[] tempArray)
+	{
+		String s = "(";
+
+		for(int i = 0; i < tempArray.length; i++)
+		{
+			s = s.concat(tempArray[i].toString() + ", ");
+
+		}
+		s = s.substring(0, s.length()-2);
+		s = s.concat(")");
+
+		return s;
 	}
 
 }

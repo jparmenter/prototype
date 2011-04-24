@@ -506,6 +506,7 @@ public class Prototype
 			}
 
 			theQuestions[index] = questionHolder;
+			//System.out.println(theQuestions[0]);
 			ans1Array[index] = ans1Holder;
 			ans2Array[index] = ans2Holder;
 			ans3Array[index] = ans3Holder;
@@ -514,7 +515,8 @@ public class Prototype
 
 			index++;
 			}
-			System.out.println("before data stuff");
+
+			System.out.println(theQuestions.toString());
 			utility.writeQuiz(quizId, theQuestions, ans1Array, ans2Array, ans3Array, ans4Array, correctAnsArray);
 		}
 		catch(Exception e)
