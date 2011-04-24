@@ -327,12 +327,12 @@ public class jaklUtilities
 public Quiz openQuiz(int quizId)
 		{
 			int tempQuestionNumber;
-			String tempQuestion = null;
-			String tempAnswer1 = null;
-			String tempAnswer2 = null;
-			String tempAnswer3 = null;
-			String tempAnswer4 = null;
-			String tempCorrectAnswer = null;
+			String[] tempQuestion = null;
+			String[] tempAnswer1 = null;
+			String[] tempAnswer2 = null;
+			String[] tempAnswer3 = null;
+			String[] tempAnswer4 = null;
+			String[] tempCorrectAnswer = null;
 
 			try
 			{
@@ -340,49 +340,49 @@ public Quiz openQuiz(int quizId)
 
 			   Statement stmt = conn.createStatement();
 
-			   ResultSet tQuestNum = stmt.executeQuery("SELECT id from \"user\" WHERE id=" + quizId);
+			   ResultSet tQuestNum = stmt.executeQuery("SELECT id from \"quiz\" WHERE id=" + quizId);
 			   tQuestNum.next();
 
 			   tempQuestionNumber = tQuestNum.getInt(1);
 
 			   tQuestNum.close();
 
-			   ResultSet tQuest = stmt.executeQuery("SELECT quest# from \"user\" WHERE id=" + quizId);
+			   ResultSet tQuest = stmt.executeQuery("SELECT array_to_string(ARRAY[question], ',') from \"quiz\" WHERE id=" + quizId);
 			   while (tQuest.next())
 			   {
 				   tempQuestion = tQuest.getString(1);
 			   }
 				tQuest.close();
 
-			   ResultSet ans1 = stmt.executeQuery("SELECT ans1 from \"user\" WHERE id=" + quizId);
+			   ResultSet ans1 = stmt.executeQuery("SELECT array_to_string(ARRAY[answer1], ',') from \"quiz\" WHERE id=" + quizId);
 			   while (ans1.next())
 			   {
 				   tempAnswer1 = ans1.getString(1);
 			   }
 			   ans1.close();
 
-			   ResultSet ans2 = stmt.executeQuery("SELECT ans2 from \"user\" WHERE id=" + quizId);
+			   ResultSet ans2 = stmt.executeQuery("SELECT array_to_string(ARRAY[answer2], ',') from \"quiz\" WHERE id=" + quizId);
 			   while (ans2.next())
 			   {
 				   tempAnswer2 = ans2.getString(1);
 			   }
 			   ans2.close();
 
-			   ResultSet ans3 = stmt.executeQuery("SELECT ans3 from \"user\" WHERE id=" + quizId);
+			   ResultSet ans3 = stmt.executeQuery("SELECT array_to_string(ARRAY[answer3], ',') from \"quiz\" WHERE id=" + quizId);
 			   while (ans3.next())
 			   {
 				   tempAnswer3 = ans3.getString(1);
 			   }
 			   ans3.close();
 
-			   ResultSet ans4 = stmt.executeQuery("SELECT ans4 from \"user\" WHERE id=" + quizId);
+			   ResultSet ans4 = stmt.executeQuery("SELECT array_to_string(ARRAY[answer4], ',') from \"quiz\" WHERE id=" + quizId);
 			   while (ans4.next())
 			   {
 				   tempAnswer4 = ans4.getString(1);
 			   }
 			   ans4.close();
 
-			   ResultSet corr = stmt.executeQuery("SELECT correct from \"user\" WHERE id=" + quizId);
+			   ResultSet corr = stmt.executeQuery("SELECT array_to_string(ARRAY[correct], ',') from \"quiz\" WHERE id=" + quizId);
 			   while (corr.next())
 			   {
 				   tempCorrectAnswer = corr.getString(1);
@@ -402,14 +402,14 @@ public Quiz openQuiz(int quizId)
 
 		}
 
-		public void writeQuiz(int quizId, String questions, String answers, String correctAnswers)
+		public void writeQuiz(int quizId, String[] questions, String[] answers, String[] correctAnswers)
 		{
 			{
 				try
 				{
 					Connection conn = DriverManager.getConnection(url,"postgres","jakl");
 					Statement st = conn.createStatement();
-					st.executeUpdate("INSERT INTO \"quiz\"\nVALUES\n(" + quizId + ", '" + questions + "', '" + answers + "', '" + correctAnswers + ")");
+					st.executeUpdate("INSERT INTO \"quiz\"\nVALUES\n(" + quizId + ", '{" + questions + "}', '{" + answers + "}', '{" + correctAnswers + "})");
 				}
 				catch (Exception e)
 				{
