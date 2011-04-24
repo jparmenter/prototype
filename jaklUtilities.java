@@ -471,7 +471,7 @@ public Quiz openQuiz(int quizId)
 
 	public String sArrayToString(String[] tempArray)
 	{
-		String s = "(";
+		String s = "";
 
 		for(int i = 0; i < tempArray.length; i++)
 		{
@@ -479,7 +479,6 @@ public Quiz openQuiz(int quizId)
 
 		}
 		s = s.substring(0, s.length()-2);
-		s = s.concat(")");
 
 		return s;
 	}
