@@ -205,6 +205,7 @@ public class jaklUtilities
 	{
 		 String title = null;
 		 String desc = null;
+		 int[] quizId = null;
 		 int teachId = 0;
 		try
 		{
@@ -235,8 +236,16 @@ public class jaklUtilities
 			   teachId = teacher.getInt(1);
 			 }
 			 teacher.close();
+
+			 ResultSet quizs = stmt.executeQuery("SELECT array_to_string(ARRAY[quizids], ',') from \"class\" WHERE id=" + courseId);
+			 ResultSetMetaData rsmd4 = quizs.getMetaData();
+			 while (quizs.next())
+			 {
+			   quizId = getClassArray(quizs.getString(1));
+			 }
+			 quizs.close();
 			 conn.close();
-			 Class tClass = new Class(courseId, title, desc, teachId);
+			 Class tClass = new Class(courseId, title, desc,quizId, teachId);
 			 return tClass;
 		}
 		catch (Exception e)
@@ -334,6 +343,7 @@ public class jaklUtilities
 
 public Quiz openQuiz(int quizId)
 		{
+			//System.out.println("HERESZFDFKLDSHSHDHGJLKSD");
 			int tempQuestionNumber;
 			String[] tempQuestion = null;
 			String[] tempAnswer1 = null;
@@ -410,13 +420,15 @@ public Quiz openQuiz(int quizId)
 
 		}
 
-		public void writeQuiz(int quizId, String[] questions, String[] answers1, String[] answers2, String[] answers3, String[] answers4, String[] correctAnswers)
+		public void writeQuiz(int quizId, String[] questions, String[] answers1, String[] answers2, String[] answers3, String[] answers4, String[] correctAnswers, int classId)
 		{
 				try
 				{
 					Connection conn = DriverManager.getConnection(url,"postgres","jakl");
 					Statement st = conn.createStatement();
 					st.executeUpdate("INSERT INTO \"quiz\"\nVALUES\n(" + quizId + ", '{" + sArrayToString(questions) + "}', '{" + sArrayToString(answers1)+ "}', '{" + sArrayToString(answers2) + "}', '{" + sArrayToString(answers3) + "}', '{" + sArrayToString(answers4) + "}', '{" + sArrayToString(correctAnswers) + "}')");
+					Statement st1 = conn.createStatement();
+					st1.executeUpdate("UPDATE \"class\" SET quizids = quizids || ARRAY["+ quizId + "] WHERE id=" + classId);
 				}
 				catch (Exception e)
 				{
@@ -479,6 +491,7 @@ public Quiz openQuiz(int quizId)
 
 		}
 		s = s.substring(0, s.length()-2);
+
 
 		return s;
 	}

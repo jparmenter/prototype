@@ -4,7 +4,7 @@ public class Quiz
 {
 
 	private int quizId;
-	private String[] question;
+	private static String[] question;
 	private String[] answer1;
 	private String[] answer2;
 	private String[] answer3;
@@ -43,6 +43,36 @@ public class Quiz
 	{
 		return question;
 	}*/
+
+	public static int numQuestions()
+	{
+		return question.length;
+	}
+
+	public String getQuestion(int index)
+	{
+		return question[index];
+	}
+
+	public String getAnswer1(int questionNum)
+	{
+		return answer1[questionNum];
+	}
+
+	public String getAnswer2(int questionNum)
+	{
+		return answer2[questionNum];
+	}
+
+	public String getAnswer3(int questionNum)
+	{
+		return answer3[questionNum];
+	}
+
+	public String getAnswer4(int questionNum)
+	{
+		return answer4[questionNum];
+	}
 
 	public int getId()
 	{

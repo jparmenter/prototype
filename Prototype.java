@@ -242,7 +242,10 @@ public class Prototype
 					option = keyboard.nextInt();
 
 					if ((option > 0))
-						visitClass(utility.openClass(option));             //instanciate selected class here (open from db)
+					{
+						Class tempClass = utility.openClass(option);
+						visitClass(tempClass);             //instanciate selected class here (open from db)
+					}
 
 				} while (option != i);
 
@@ -258,9 +261,8 @@ public class Prototype
 	{
 		int option, i = 1;
 		String s = "\nWelcome to " + currClass.getTitle() + "\n\n" +
-				"\t(" + i++ + ") " + "View Quizzes\n" +
+				"\t(" + i++ + ") " + "Take Quiz\n" +
 				"\t(" + i++ + ") " + "View Grades\n";
-
 		if (curr.getStatus() == 'a')
 		{
 			s += "\t(" + i++ + ") " + "Modify Roster\n" +
@@ -271,7 +273,8 @@ public class Prototype
 		}
 		else if (curr.getStatus() == 't')
 		{
-			s += "\t(" + i++ + ") " + "Modify Roster\n";
+			s += "\t(" + i++ + ") " + "Add Student\n" +
+				"\t(" + i++ + ") " + "Create Quiz\n";
 		}
 
 		s += "\t(" + i + ") " + "Back\n" +
@@ -286,7 +289,7 @@ public class Prototype
 			switch(option)
 			{
 				case 1:
-					createQuiz();
+					viewQuiz(currClass);
 					break;
 				case 2:
 					System.out.println("View Grades");
@@ -300,11 +303,11 @@ public class Prototype
 				case 4:
 					if (curr.getStatus() == 'a')
 						System.out.println("Change Teacher");
-					else if (curr.getStatus() == 't')
+					else if(curr.getStatus() == 't')
+						{
+						createQuiz(currClass);
 						option = 5;
-					else if (curr.getStatus() == 's')
-						System.out.println("\nEnter a correct option\n");
-
+						}
 					break;
 				case 5:
 					if (curr.getStatus() != 'a')
@@ -318,7 +321,7 @@ public class Prototype
 
 	}
 
-	public static void listQuizzes(Vector<Quiz> quizzes)
+	/*public static void listQuizzes( classId)
 	{
 		String s = "\n\tQuiz List\n\n";
 		int i, option = 0;
@@ -348,29 +351,31 @@ public class Prototype
 			option = keyboard.nextInt();
 
 			if ((option > 0) && (option < i))
-				if (quizzes != null)
-					viewQuiz(quizzes.get(--option));
-			else if (option != i)
+					viewQuiz(utility.openQuiz(option));
+			else
 				System.out.println("\nEnter a correct option\n");
 		} while (option != i);
-	}
+	}*/
 
-	public static void viewQuiz(Quiz quiz)
+	public static void viewQuiz(Class currClass)
 	{
-		System.out.println("\n" + quiz + "\n");
-		String s;
+		Quiz currQuiz;
 		int option;
 
-		if (curr.getStatus() == 's')
-			s = "\t(1) Take Quiz\n";
-		else
-			s = "\t(1) Modify Quiz\n";
-
-		s += "\t(2) Back\n" + "\nEnter an option: ";
-
+		for(int i = 0; i < currClass.getNumQuizes();i++)
+		{
+			System.out.println("\n" + currClass.showQuizId(i));
+		}
 		do
 		{
-			System.out.print(s);
+		System.out.println("Enter the QuizID you would like to take:");
+		option = keyboard.nextInt();
+
+
+			currQuiz = utility.openQuiz(option);
+			takeQuiz(currQuiz);
+
+			/*System.out.print(s);
 			option = keyboard.nextInt();
 			if (option == 1)
 			{
@@ -381,36 +386,36 @@ public class Prototype
 
 			}
 			else if (option != 2)
-				System.out.println("\nEnter a correct option\n");
+				System.out.println("\nEnter a correct option\n");*/
 
-		} while (option != 2);
+		} while (option != 3);
 	}
 
-	public static void takeQuiz(Quiz quiz)
+	public static void takeQuiz(Quiz currQuiz)
 	{
-		/*Vector<String> sAnswers = new Vector<String>();
-		Vector<Question> question = quiz.getQuestion();
-		System.out.println("\n" + quiz.getTitle() + "\n");
+		//Vector<String> sAnswers = new Vector<String>();
+		//Vector<Question> question = quiz.getQuestion();
+		System.out.println("\n" + currQuiz.getId() + "\n");
 		String s;
+		int choice = 0;
 
-		for (int i = 0; i < question.size(); i++)
+		for(int i = 0; i < currQuiz.numQuestions(); i++)
 		{
-			s = ((question.get(i)).getTitle()) + "\n\n";
-			Vector<Answer> answers = (((question.get(i)).getAnswer()));
+			System.out.println(currQuiz.numQuestions() + " : " + i);
+			System.out.println((currQuiz.getQuestion(i)) + "\n\n");
+			System.out.print(currQuiz.getAnswer1(i) + "\n");
+			System.out.print(currQuiz.getAnswer2(i) + "\n");
+			System.out.print(currQuiz.getAnswer3(i) + "\n");
+			System.out.print(currQuiz.getAnswer4(i) + "\n");
 
-			for (int j = 0; j < answers.size(); j++)
-			{
-				s += "\t(" + (j+1) + ") " + answers.get(j) + "\n";
-			}
-			s += "\nEnter your answer: ";
-			System.out.print(s);
-			int choice = keyboard.nextInt();
-			sAnswers.add((answers.get(--choice)).getStmt());
+			System.out.println("\nEnter your answer: ");
+			choice = keyboard.nextInt();
 		}
 
+
 		//int grade = quiz.grade(sAnswers);
-		System.out.println("\n" + grade + "\n");
-		//curr.modifyGrade(1, grade);*/
+		//System.out.println("\n" + grade + "\n");
+		//curr.modifyGrade(1, grade);
 	}
 
 	public static void accountManagement()
@@ -440,12 +445,13 @@ public class Prototype
 	}
 
 
-	public static void createQuiz()
+	public static void createQuiz(Class currClass)
 	{
 		try{
 			int quizLength;
 			int index = 0;
 			int quizId;
+			int currentClass = currClass.getId();
 
 			System.out.println("\nCreate Quiz\n");
 
@@ -506,7 +512,6 @@ public class Prototype
 			}
 
 			theQuestions[index] = questionHolder;
-			//System.out.println(theQuestions[0]);
 			ans1Array[index] = ans1Holder;
 			ans2Array[index] = ans2Holder;
 			ans3Array[index] = ans3Holder;
@@ -515,9 +520,7 @@ public class Prototype
 
 			index++;
 			}
-
-			System.out.println(theQuestions.toString());
-			utility.writeQuiz(quizId, theQuestions, ans1Array, ans2Array, ans3Array, ans4Array, correctAnsArray);
+			utility.writeQuiz(quizId, theQuestions, ans1Array, ans2Array, ans3Array, ans4Array, correctAnsArray, currentClass);
 		}
 		catch(Exception e)
 		{
